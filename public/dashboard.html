@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人生剧本 · 项目看板</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; background: #f5f5f7; color: #1d1d1f; }
+.container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 14px; color: #888; margin-bottom: 24px; }
+.update-time { font-size: 12px; color: #aaa; margin-bottom: 20px; }
+
+/* Progress bar */
+.progress-section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.progress-label { font-size: 15px; font-weight: 600; }
+.progress-pct { font-size: 24px; font-weight: 700; color: #07c160; }
+.progress-bar { height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #07c160, #10b981); transition: width 0.5s; }
+.progress-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #888; }
+
+/* Deadline */
+.deadline-bar { background: white; border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 12px; }
+.deadline-icon { font-size: 28px; }
+.deadline-text { flex: 1; }
+.deadline-title { font-size: 14px; font-weight: 600; }
+.deadline-sub { font-size: 12px; color: #888; }
+.deadline-days { font-size: 28px; font-weight: 700; color: #ff3b30; }
+.deadline-unit { font-size: 12px; color: #888; }
+
+/* Cards */
+.card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* Task list */
+.task { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+.task:last-child { border-bottom: none; }
+.task-status { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.task-status.done { background: #07c160; color: white; }
+.task-status.doing { background: #ff9500; color: white; animation: pulse 2s infinite; }
+.task-status.blocked { background: #ff3b30; color: white; }
+.task-status.todo { background: #e0e0e0; color: #999; }
+.task-content { flex: 1; }
+.task-name { font-size: 14px; font-weight: 500; }
+.task-desc { font-size: 12px; color: #888; margin-top: 2px; }
+.task-tag { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
+.tag-blocked { background: #fff0f0; color: #ff3b30; }
+.tag-waiting { background: #fff8e6; color: #ff9500; }
+.tag-done { background: #e8f8ef; color: #07c160; }
+
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+/* Log */
+.log-entry { padding: 10px 0; border-bottom: 1px solid #f5f5f5; display: flex; gap: 10px; }
+.log-entry:last-child { border-bottom: none; }
+.log-time { font-size: 11px; color: #aaa; width: 90px; flex-shrink: 0; padding-top: 2px; }
+.log-content { font-size: 13px; line-height: 1.5; flex: 1; }
+.log-tag { display: inline-block; font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-right: 4px; }
+.log-tag.build { background: #e8f8ef; color: #07c160; }
+.log-tag.design { background: #e8f0fe; color: #3b82f6; }
+.log-tag.fix { background: #fff0f0; color: #ff3b30; }
+.log-tag.feat { background: #f3e8ff; color: #8b5cf6; }
+.log-tag.decision { background: #fff8e6; color: #ff9500; }
+
+/* Blocker */
+.blocker { background: #fff8f8; border: 1px solid #ffe0e0; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.blocker-title { font-size: 13px; font-weight: 600; color: #ff3b30; margin-bottom: 4px; }
+.blocker-desc { font-size: 12px; color: #666; line-height: 1.5; }
+.blocker-action { font-size: 12px; color: #3b82f6; margin-top: 6px; font-weight: 500; }
+
+/* Architecture */
+.arch-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.arch-box { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; }
+.arch-done { background: #e8f8ef; color: #07c160; border: 1px solid #c8ecd5; }
+.arch-doing { background: #fff8e6; color: #ff9500; border: 1px solid #ffe0a0; }
+.arch-todo { background: #f5f5f5; color: #999; border: 1px solid #e0e0e0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🎬 人生剧本 · 项目看板</h1>
+<p class="subtitle">PCG校园AI产品创意大赛 · 命题赛题1（腾讯视频·互动叙事）</p>
+<p class="update-time">最后更新：2026-04-27 16:25</p>
+
+<!-- Deadline -->
+<div class="deadline-bar">
+  <div class="deadline-icon">⏰</div>
+  <div class="deadline-text">
+    <div class="deadline-title">初赛截止日</div>
+    <div class="deadline-sub">2026年5月6日</div>
+  </div>
+  <div style="text-align:center;">
+    <div class="deadline-days">9</div>
+    <div class="deadline-unit">天</div>
+  </div>
+</div>
+
+<!-- Overall progress -->
+<div class="progress-section">
+  <div class="progress-header">
+    <span class="progress-label">整体进度</span>
+    <span class="progress-pct">45%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+  <div class="progress-meta">
+    <span>已完成 5/11 项</span>
+    <span>预计完成：5月4日</span>
+  </div>
+</div>
+
+<!-- Blockers -->
+<div class="card">
+  <div class="card-title">🚨 当前卡点</div>
+  <div class="blocker">
+    <div class="blocker-title">LLM API Key 未接入</div>
+    <div class="blocker-desc">已预留API接口（/api/chat），但需要DeepSeek/混元/OpenAI的API Key才能启用真实AI对话。当前使用预设回复mock。</div>
+    <div class="blocker-action">👉 需要你提供：API Key + Base URL</div>
+  </div>
+  <div class="blocker">
+    <div class="blocker-title">对话内容深度不足</div>
+    <div class="blocker-desc">mock回复是固定的2-3句话，缺乏对用户不同表达的细腻回应。接入LLM后可解决。</div>
+    <div class="blocker-action">👉 依赖上一项解决</div>
+  </div>
+</div>
+
+<!-- Task breakdown -->
+<div class="card">
+  <div class="card-title">📋 任务清单</div>
+  
+  <div style="font-size:13px; font-weight:600; color:#888; margin-bottom:8px; margin-top:4px;">基础框架</div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">项目初始化 + 技术选型</div>
+      <div class="task-desc">Next.js 16 + TypeScript + Tailwind + Framer Motion</div>
+      <span class="task-tag tag-done">4/22 完成</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">产品框架 + 技术架构定稿</div>
+      <div class="task-desc">类型系统 / 角色定义 / 剧情阶段 / Prompt模板 / 对话引擎 / Mock回复 全拆分</div>
+      <span class="task-tag tag-done">4/27 完成</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">Landing页 + 角色选择页</div>
+      <div class="task-desc">星空背景开屏 + 3角色卡片选择</div>
+      <span class="task-tag tag-done">4/24 完成</span>
+    </div>
+  </div>
+  
+  <div style="font-size:13px; font-weight:600; color:#888; margin:12px 0 8px;">聊天核心</div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">微信式聊天UI</div>
+      <div class="task-desc">气泡消息+三角箭头+正在输入+系统消息+旁白+时间跳跃</div>
+      <span class="task-tag tag-done">4/27 完成</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">AI生成角色头像</div>
+      <div class="task-desc">3个角色+1个用户的真实照片级头像，替换emoji</div>
+      <span class="task-tag tag-done">4/27 完成</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status doing">⟳</div>
+    <div class="task-content">
+      <div class="task-name">建议回复 + 意图分类</div>
+      <div class="task-desc">底部3个建议回复按钮已实现 · 关键词意图分类已实现 · 待接入LLM提升准确度</div>
+      <span class="task-tag tag-waiting">基础完成 · 待LLM优化</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status blocked">!</div>
+    <div class="task-content">
+      <div class="task-name">LLM实时对话接入</div>
+      <div class="task-desc">API Route已预留，Prompt模板已写好，等待API Key</div>
+      <span class="task-tag tag-blocked">卡点：需要API Key</span>
+    </div>
+  </div>
+  
+  <div style="font-size:13px; font-weight:600; color:#888; margin:12px 0 8px;">剧情内容</div>
+  
+  <div class="task">
+    <div class="task-status doing">⟳</div>
+    <div class="task-content">
+      <div class="task-name">3角色完整剧本</div>
+      <div class="task-desc">林小宇 ✅ 陈浩然 ✅ 苏默默 ✅ · 各4阶段+3结局 · mock回复库已填充 · 接入LLM后内容自动升级</div>
+      <span class="task-tag tag-waiting">框架完成 · 内容待LLM丰富</span>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status done">✓</div>
+    <div class="task-content">
+      <div class="task-name">结局页 + 平行人生对比</div>
+      <div class="task-desc">9个结局 · 5维指标条形图 · "如果你说了不同的话"对比板块</div>
+      <span class="task-tag tag-done">4/27 完成</span>
+    </div>
+  </div>
+  
+  <div style="font-size:13px; font-weight:600; color:#888; margin:12px 0 8px;">提交物</div>
+  
+  <div class="task">
+    <div class="task-status todo">○</div>
+    <div class="task-content">
+      <div class="task-name">部署到Vercel（可访问的Demo链接）</div>
+      <div class="task-desc">代码已部署就绪，需确认API Key后上线</div>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status todo">○</div>
+    <div class="task-content">
+      <div class="task-name">录制3分钟演示录屏</div>
+      <div class="task-desc">MP4 / H.264 / ≥1080p / 语音讲解</div>
+    </div>
+  </div>
+  
+  <div class="task">
+    <div class="task-status todo">○</div>
+    <div class="task-content">
+      <div class="task-name">撰写说明文档PDF</div>
+      <div class="task-desc">四模块：用户洞察/产品方案/AI原生能力/加分项</div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<div class="card">
+  <div class="card-title">🏗️ 技术架构</div>
+  <div style="font-size:12px; color:#888; margin-bottom:10px;">绿色=已完成 · 黄色=进行中 · 灰色=未开始</div>
+  
+  <div style="font-size:12px; font-weight:600; margin-bottom:6px;">前端页面</div>
+  <div class="arch-row">
+    <span class="arch-box arch-done">Landing页</span>
+    <span class="arch-box arch-done">角色选择页</span>
+    <span class="arch-box arch-done">聊天界面</span>
+    <span class="arch-box arch-done">结局页</span>
+  </div>
+  
+  <div style="font-size:12px; font-weight:600; margin:10px 0 6px;">数据层</div>
+  <div class="arch-row">
+    <span class="arch-box arch-done">types/index.ts</span>
+    <span class="arch-box arch-done">characters.ts</span>
+    <span class="arch-box arch-done">story-stages.ts</span>
+    <span class="arch-box arch-done">mock-responses.ts</span>
+  </div>
+  
+  <div style="font-size:12px; font-weight:600; margin:10px 0 6px;">引擎层</div>
+  <div class="arch-row">
+    <span class="arch-box arch-done">chat-engine.ts</span>
+    <span class="arch-box arch-done">prompts.ts</span>
+    <span class="arch-box arch-doing">API Route</span>
+  </div>
+  
+  <div style="font-size:12px; font-weight:600; margin:10px 0 6px;">资源</div>
+  <div class="arch-row">
+    <span class="arch-box arch-done">头像×4 (AI生成)</span>
+    <span class="arch-box arch-done">微信CSS</span>
+    <span class="arch-box arch-todo">部署配置</span>
+  </div>
+</div>
+
+<!-- Execution log -->
+<div class="card">
+  <div class="card-title">📝 执行日志</div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/27 16:15</div>
+    <div class="log-content">
+      <span class="log-tag feat">FEAT</span>
+      AI生成真实角色头像（xiaoyu/haoran/momo/user），替换所有emoji。微信气泡加入三角形箭头。
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/27 15:48</div>
+    <div class="log-content">
+      <span class="log-tag design">ARCH</span>
+      完成技术架构重构：类型系统 → 角色定义 → 剧情阶段 → Prompt模板 → 对话引擎 → Mock回复 → API Route预留。写好ARCHITECTURE.md。
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/27 15:26</div>
+    <div class="log-content">
+      <span class="log-tag decision">决策</span>
+      产品框架定稿：用户=普通成年人（非导师）/ 自由输入+3建议回复 / 3-5分钟 / 结局+对比 / LLM实时对话(预留)
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/24 18:00</div>
+    <div class="log-content">
+      <span class="log-tag feat">FEAT</span>
+      v3: 微信高仿UI + 多角色选择页 + 3角色×3结局完整剧本。参考KM热榜AIMate文章的"活人感"设计。
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/24 14:19</div>
+    <div class="log-content">
+      <span class="log-tag decision">决策</span>
+      核心改动：① 视角从"我的人生"→"旁观别人的人生" ② 交互从选择按钮→微信式自由对话
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/22 12:18</div>
+    <div class="log-content">
+      <span class="log-tag decision">决策</span>
+      选定「人生剧本」方向，赛道=命题赛题1（腾讯视频·互动叙事）。基于获奖规律分析，从20个方向中筛选出的S级选题。
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/22 11:50</div>
+    <div class="log-content">
+      <span class="log-tag design">分析</span>
+      完成赛事全景分析：5道命题+1开放赛道、提交物要求（Demo+录屏+PDF）、评分7维度、获奖案例研究。
+    </div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">4/22 11:25</div>
+    <div class="log-content">
+      <span class="log-tag build">START</span>
+      项目启动。用户分享PCG校园AI产品创意大赛链接，开始赛事分析和选题。
+    </div>
+  </div>
+</div>
+
+<!-- Decision log -->
+<div class="card">
+  <div class="card-title">🧭 关键决策记录</div>
+  
+  <div class="log-entry">
+    <div class="log-time">#1</div>
+    <div class="log-content"><strong>赛道选择</strong>：命题赛题1（腾讯视频·互动叙事）而非开放赛道。理由：命题赛道"赛道适配性"天然满分，且大部分参赛者会做"给现有IP加互动"，我们做"以真实人物为主角的AI对话叙事"形成差异化。</div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">#2</div>
+    <div class="log-content"><strong>产品定位</strong>：从"你是主角做选择"→"你旁观别人的人生并通过对话影响TA"。理由：降低用户心理门槛+增强叙事感+对话更自然。灵感来源：腾讯内部AIMate虚拟陪伴项目的"活人感"设计。</div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">#3</div>
+    <div class="log-content"><strong>用户身份</strong>：普通成年人，不是导师。理由：核心message是"普通的真诚对话就能影响一个人的人生"，而非"你要负责给TA正确的建议"。</div>
+  </div>
+  
+  <div class="log-entry">
+    <div class="log-time">#4</div>
+    <div class="log-content"><strong>技术方案</strong>：LLM实时对话+预设剧情节点（混合架构）。当前API未接入，用mock跑通全流程。理由：评委体验优先，mock保底稳定，LLM锦上添花。</div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

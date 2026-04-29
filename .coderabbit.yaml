@@ -1,0 +1,27 @@
+# CodeRabbit Configuration
+# Docs: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "zh-CN"
+
+reviews:
+  # 每次PR自动触发审查
+  auto_review:
+    enabled: true
+    drafts: false
+  # 审查维度
+  path_instructions:
+    - path: "src/**"
+      instructions: |
+        这是一个Next.js 16 + TypeScript项目，参加腾讯PCG AI产品创意大赛。
+        请重点关注：
+        - TypeScript类型安全
+        - React hooks使用是否正确
+        - 性能问题（不必要的re-render等）
+        - 用户体验相关的代码逻辑
+    - path: "src/lib/**"
+      instructions: "核心业务逻辑，请检查边界条件和数据一致性"
+    - path: "src/app/**"
+      instructions: "页面组件，关注可访问性和响应式适配"
+
+chat:
+  auto_reply: true

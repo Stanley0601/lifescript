@@ -1,7 +1,7 @@
 // 对话记忆持久化模块
 // 使用 localStorage 保存对话历史、角色进度、用户选择
 
-import type { ChatMsg, MomentPost } from "@/types";
+import type { ChatMsg, InterestTag, MomentComment, ProactiveInboxState, RelationshipState, UserProfile } from "@/types";
 
 const STORAGE_KEY_PREFIX = "lifescript_";
 
@@ -43,6 +43,11 @@ export interface ChatHistory {
   messages: ChatMsg[];
   stageIndex: number;       // 当前处于第几个stage
   turnCount: number;        // 对话轮次
+  userIntents?: string[];   // 用户历史意图，用于结局判断
+  suggestedReplies?: string[];
+  isFinished?: boolean;
+  endingId?: string | null;
+  usedInterestTopicIds?: string[];
   lastUpdated: number;      // timestamp
 }
 
@@ -89,12 +94,66 @@ export function loadSelectedStory(): string | null {
 }
 
 // ============================================
+// 用户兴趣画像
+// ============================================
+
+export function saveUserProfile(profile: UserProfile): void {
+  setItem("user_profile", profile);
+}
+
+export function loadUserProfile(): UserProfile | null {
+  return getItem<UserProfile | null>("user_profile", null);
+}
+
+export interface UserSignals {
+  likedCharacterIds: string[];
+  likedTopicTags: InterestTag[];
+  lastViewedMomentsAt?: number;
+}
+
+export function saveUserSignals(signals: UserSignals): void {
+  setItem("user_signals", signals);
+}
+
+export function loadUserSignals(): UserSignals | null {
+  return getItem<UserSignals | null>("user_signals", null);
+}
+
+export function saveRelationshipState(state: Record<string, RelationshipState>): void {
+  setItem("relationships", state);
+}
+
+export function loadRelationshipState(): Record<string, RelationshipState> | null {
+  return getItem<Record<string, RelationshipState> | null>("relationships", null);
+}
+
+// ============================================
+// 主动消息收件箱
+// ============================================
+
+export function saveProactiveInbox(inbox: ProactiveInboxState): void {
+  setItem("proactive_inbox", inbox);
+}
+
+export function loadProactiveInbox(): ProactiveInboxState | null {
+  return getItem<ProactiveInboxState | null>("proactive_inbox", null);
+}
+
+export function clearProactiveInboxEntry(characterId: string): void {
+  const inbox = loadProactiveInbox() || {};
+  if (!inbox[characterId]) return;
+  const nextInbox = { ...inbox };
+  delete nextInbox[characterId];
+  saveProactiveInbox(nextInbox);
+}
+
+// ============================================
 // 朋友圈状态（点赞、评论）
 // ============================================
 
 export interface MomentState {
   likedPosts: string[];           // post IDs the user liked
-  comments: Record<string, { id: string; text: string }[]>;  // postId -> user comments
+  comments: Record<string, MomentComment[]>;  // postId -> user comments
 }
 
 export function saveMomentState(state: MomentState): void {

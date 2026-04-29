@@ -1,20 +1,20 @@
-import type { ChatApiResponse } from "@/types";
+import type { ChatApiResponse, UserProfile } from "@/types";
+import { buildCharacterTopicReplies, pickTopicForChat } from "./interest-context";
 
 /**
  * Mock回复：当LLM API未接入时，根据用户意图返回预设回复
  * 后续接入API后，这个文件只作为fallback
  */
 
-type Intent = "encourage" | "question" | "discourage" | "neutral";
+export type Intent = "encourage" | "question" | "discourage" | "neutral";
 
-// 简单意图分类
 export function classifyIntent(text: string): Intent {
   const t = text.toLowerCase();
   const enc = ["加油","去吧","勇敢","支持","冲","大胆","相信","试试","没关系","会好","厉害","棒","可以的","你行","不错","开心就好","值得","机会","难得","别犹豫","别怕","没问题","喜欢就","追","当然","肯定","挺好","做吧","干吧","走","别放弃","相信自己","感觉是对的","跟着心","热爱","梦想","酷","牛","对的","没错","就是","应该去","很好","真棒","cool"];
   const que = ["为什么","怎么","什么","具体","细节","多少","哪个","？","如何","感觉","觉得","想法","计划","原因","为啥","考虑","呢","吗","比如","万一","那","说说","聊聊","什么样","怎么样","后来","然后"];
   const dis = ["稳","风险","小心","考虑清楚","别冲动","三思","慎重","现实","算了","别去","不行","保研","留下","安全","踏实","毕竟","学历","还是","先","不靠谱","太冒险","不建议","别急","想清楚","不一定"];
 
-  let s = { e: 0, q: 0, d: 0 };
+  const s = { e: 0, q: 0, d: 0 };
   enc.forEach(w => { if (t.includes(w)) s.e += 2; });
   que.forEach(w => { if (t.includes(w)) s.q += 1; });
   dis.forEach(w => { if (t.includes(w)) s.d += 2; });
@@ -26,7 +26,6 @@ export function classifyIntent(text: string): Intent {
   return "discourage";
 }
 
-// Mock回复库：按角色 × 阶段 × 意图
 const mockReplies: Record<string, Record<string, Record<Intent, { replies: string[]; advance: boolean }>>> = {
   xiaoyu: {
     "xy-intro": {
@@ -108,12 +107,10 @@ const mockReplies: Record<string, Record<string, Record<Intent, { replies: strin
   },
 };
 
-// 根据对话历史判断结局走向
 export function determineEnding(charId: string, intents: Intent[]): string {
   const scores = { encourage: 0, question: 0, discourage: 0, neutral: 0 };
   intents.forEach((i) => { scores[i]++; });
 
-  // 鼓励多→勇敢结局，质疑多→保守结局，中立/提问多→折中结局
   if (charId === "xiaoyu") {
     if (scores.encourage >= scores.discourage && scores.encourage >= scores.question) return "xy-e-job";
     if (scores.discourage > scores.encourage) return "xy-e-pg";
@@ -132,13 +129,31 @@ export function determineEnding(charId: string, intents: Intent[]): string {
   return "";
 }
 
-// 获取mock回复
+function maybeBuildInterestReplies(
+  charId: string,
+  userProfile: UserProfile | null | undefined,
+  usedTopicIds: string[] = [],
+): { replies: string[]; topicId?: string } {
+  const tags = userProfile?.interestTags || [];
+  if (tags.length === 0) return { replies: [] };
+
+  const topic = pickTopicForChat(tags, usedTopicIds);
+  if (!topic) return { replies: [] };
+
+  return {
+    replies: buildCharacterTopicReplies(charId, topic),
+    topicId: topic.id,
+  };
+}
+
 export function getMockResponse(
   charId: string,
   stageId: string,
   userText: string,
   stageIndex: number,
   totalStages: number,
+  userProfile?: UserProfile | null,
+  usedTopicIds: string[] = [],
 ): ChatApiResponse {
   const intent = classifyIntent(userText);
   const charMock = mockReplies[charId];
@@ -151,21 +166,33 @@ export function getMockResponse(
       emotion: "neutral",
       shouldAdvanceStage: false,
       nextStageId: null,
-      suggestedReplies: [],
+      suggestedReplies: ["继续说", "我在听", "然后呢"],
     };
   }
 
-  // deep阶段需要多轮对话，不立即推进
-  const shouldAdvance = data.advance;
+  const shouldInjectTopic = !!userProfile?.interestTags?.length && stageIndex <= 1 && Math.random() > 0.35;
+  const interestPayload = shouldInjectTopic
+    ? maybeBuildInterestReplies(charId, userProfile, usedTopicIds)
+    : { replies: [], topicId: undefined };
+
+  const replies = [...data.replies, ...interestPayload.replies].map((text, index) => ({
+    text,
+    delay: 700 + index * 250,
+  }));
 
   return {
-    replies: data.replies.map((text, i) => ({
-      text,
-      delay: 600 + i * 300 + Math.random() * 400,
-    })),
-    emotion: intent === "encourage" ? "hopeful" : intent === "discourage" ? "defensive" : "reflective",
-    shouldAdvanceStage: shouldAdvance,
-    nextStageId: null, // 由chat-engine根据stage定义决定
-    suggestedReplies: [],
+    replies,
+    emotion: intent,
+    shouldAdvanceStage: data.advance || stageIndex >= totalStages - 1,
+    nextStageId: null,
+    suggestedReplies:
+      intent === "encourage"
+        ? ["你其实已经有答案了", "我支持你", "去试试吧"]
+        : intent === "question"
+          ? ["具体是怎么回事", "你最在意什么", "那后来呢"]
+          : intent === "discourage"
+            ? ["还是稳一点吧", "风险会不会太大", "再想想"]
+            : ["我懂", "继续说", "我在听"],
+    usedInterestTopicId: interestPayload.topicId,
   };
 }

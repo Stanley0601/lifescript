@@ -9,4 +9,5 @@ export { default as TimelineView } from "./TimelineView";
 export { default as EndingView } from "./EndingView";
 export { default as MyProfileTab } from "./MyProfileTab";
 export { default as StorySelect } from "./StorySelect";
+export { default as InterestSelect } from "./InterestSelect";
 export { MsgBubble, TypingBubble } from "./ChatBubbles";

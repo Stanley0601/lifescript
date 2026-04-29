@@ -40,6 +40,77 @@ export interface ChatMsg {
   text: string;
   delay?: number;
   typing?: number;
+  moodHint?: string;
+}
+
+export type InterestTag =
+  | "足球"
+  | "篮球"
+  | "动漫"
+  | "游戏"
+  | "追星"
+  | "科技"
+  | "新闻时事"
+  | "音乐"
+  | "电影"
+  | "美食";
+
+export interface UserProfile {
+  interestTags: InterestTag[];
+  updatedAt: number;
+  likedTopicTags?: InterestTag[];
+  likedCharacterIds?: string[];
+  city?: string;
+}
+
+export type FamiliarityStage = "陌生" | "熟络" | "暧昧";
+
+export interface WeatherContext {
+  city: string;
+  summary: string;
+  advice: string;
+  temperatureRange?: string;
+  fetchedAt: number;
+}
+
+export interface RelationshipState {
+  characterId: string;
+  familiarity: number;
+  stage: FamiliarityStage;
+  chemistry: number;
+  weather?: WeatherContext | null;
+}
+
+export interface InterestTopic {
+  id: string;
+  tag: InterestTag;
+  title: string;
+  brief: string;
+  mention: string;
+  question: string;
+}
+
+export interface EndingOutcomePreview {
+  title: string;
+  emoji: string;
+  description: string;
+  stats: Record<string, number>;
+}
+
+export interface InterestMomentContext {
+  topicId: string;
+  topicTag: InterestTag;
+  topicTitle: string;
+  topicBrief: string;
+  reason: string;
+}
+
+export interface EndingContrastCard {
+  endingId: string;
+  title: string;
+  description: string;
+  alternateText: string;
+  outcome?: EndingOutcomePreview;
 }
 
 export interface ChatApiRequest {
@@ -47,6 +118,8 @@ export interface ChatApiRequest {
   stageId: string;
   history: { role: "assistant" | "user"; content: string }[];
   userMessage: string;
+  userProfile?: UserProfile | null;
+  realtimeTopics?: InterestTopic[];
 }
 
 export interface ChatApiResponse {
@@ -55,6 +128,7 @@ export interface ChatApiResponse {
   shouldAdvanceStage: boolean;
   nextStageId: string | null;
   suggestedReplies: string[];
+  usedInterestTopicId?: string;
 }
 
 export interface Ending {
@@ -71,6 +145,7 @@ export interface EndingComparison {
   title: string;
   description: string;
   alternateText: string;
+  outcome?: EndingOutcomePreview;
 }
 
 // ======= v5 新增类型 =======
@@ -87,6 +162,9 @@ export interface MomentPost {
   likes: number;
   likedByUser: boolean;
   comments: MomentComment[];
+  interestContext?: InterestMomentContext;
+  relationshipStage?: FamiliarityStage;
+  recommendationTags?: string[];
 }
 
 export interface MomentComment {
@@ -106,6 +184,15 @@ export interface CharacterStatus {
   stageProgress: number;     // 0-4 剧情进度
   hasFinished: boolean;
   endingId?: string;
+  isProactiveInterest?: boolean;
+  proactiveTag?: InterestTag;
+  interestSummary?: string;
+  freshnessLabel?: string;
+  recommendedReason?: string;
+  affinityScore?: number;
+  familiarity?: number;
+  relationshipStage?: FamiliarityStage;
+  chemistry?: number;
 }
 
 /** 人生时间线节点 */
@@ -127,6 +214,18 @@ export interface ProactiveMessage {
   messages: ChatMsg[];
   triggerCondition: "first_visit" | "return_visit" | "idle";
 }
+
+export interface ProactiveInboxEntry extends ProactiveMessage {
+  id: string;
+  preview: string;
+  lastMessageTime: string;
+  unread: boolean;
+  createdAt: number;
+  topicId?: string;
+  topicTag?: InterestTag;
+}
+
+export type ProactiveInboxState = Record<string, ProactiveInboxEntry>;
 
 /** Tab 类型 */
 export type TabType = "messages" | "moments" | "profile";

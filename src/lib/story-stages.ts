@@ -5,9 +5,6 @@ let _id = 0;
 function cm(from: ChatMsg["from"], text: string, type: ChatMsg["type"] = "text", delay = 700, typing = 600): ChatMsg {
   return { id: `s${++_id}`, from, type, text, delay, typing: from === "char" ? typing : 0 };
 }
-function nar(text: string): ChatMsg {
-  return cm("narrator", text, "narration", 1000, 0);
-}
 function sysMsg(text: string): ChatMsg {
   return cm("system", text, "system", 600, 0);
 }
@@ -40,61 +37,66 @@ export function getXiaoyuStages(): StoryStage[] {
         cm("char", "室友们秋招都搞定了"),
         cm("char", "就我还在纠结😭"),
       ],
-      suggestedReplies: ["怎么了 慢慢说", "听着呢 你说", "纠结什么呀"],
-      turnsInStage: 2,
+      suggestedReplies: ["怎么了？", "慢慢说", "在纠结什么"],
+      turnsInStage: 1,
     },
     {
       id: "xy-dilemma",
-      description: "说出核心困境：保研vs创业公司",
+      description: "坦白自己的选择困境：保研 vs 创业公司Offer",
       emotion: "纠结、兴奋又害怕",
-      advanceTrigger: "用户表达了对她选择的看法（支持工作/支持保研/中立分析）",
+      advanceTrigger: "用户明显表达立场（支持冒险/支持稳妥/深入分析）",
       nextStageId: "xy-deep",
       openingMessages: [
-        cm("char", "事情是这样的"),
-        cm("char", "我拿到保研名额了 导师方向是NLP"),
-        cm("char", "但是！"),
-        cm("char", "我偷偷去面了一家AI创业公司"),
-        cm("char", "做Agent的 20来个人 CEO超有想法"),
-        cm("char", "面试聊了俩小时我都忘了时间"),
-        cm("char", "他们给了我产品负责人的offer"),
-        cm("char", "所以现在就是"),
-        cm("char", "保研 vs 创业公司"),
-        cm("char", "啊啊啊怎么办🤯"),
+        cm("char", "其实是这样的"),
+        cm("char", "我保研基本稳了"),
+        cm("char", "导师方向也不错 做NLP"),
+        cm("char", "但前几天我偷偷去面了家AI创业公司"),
+        cm("char", "结果他们居然给我发offer了"),
+        cm("char", "不是大厂 但团队超强 CEO以前是字节出来的"),
+        cm("char", "我去那天真的有种…‘我想待在这里’的感觉"),
+        cm("char", "可如果去了 就等于放弃保研"),
+        cm("char", "我爸妈肯定会疯"),
+        cm("char", "你说我是不是在发神经🥲"),
       ],
-      suggestedReplies: ["你心里更偏向哪个？", "创业公司听起来挺酷的", "保研也没什么不好啊"],
+      suggestedReplies: ["这机会很难得", "保研也很香", "你自己更想要哪个"],
       turnsInStage: 2,
     },
     {
       id: "xy-deep",
-      description: "深入聊内心——家庭压力、自我怀疑、真实渴望",
-      emotion: "脆弱、真诚",
-      advanceTrigger: "聊了2-3轮后自然推进到决定阶段",
+      description: "深入聊自己的恐惧：害怕让父母失望，也害怕以后后悔",
+      emotion: "脆弱、自我怀疑",
+      advanceTrigger: "用户给予足够情绪支持或现实建议，帮助她梳理内心",
       nextStageId: "xy-decision",
       openingMessages: [
-        cm("char", "说实话 面完那天从公司出来"),
-        cm("char", "我在地铁上笑了一路"),
-        cm("char", "好久好久没有那种感觉了"),
-        cm("char", "但是我爸妈已经跟所有亲戚说我要读研了"),
-        cm("char", "我妈肯定会哭的"),
-        cm("char", "而且创业公司 万一倒了呢"),
+        cm("char", "我最怕的不是吃苦"),
+        cm("char", "我怕的是如果我选了‘看起来正确’的路"),
+        cm("char", "以后会不会一直想着另一种人生"),
+        cm("char", "但如果我真去工作了"),
+        cm("char", "万一做得很烂呢"),
+        cm("char", "万一公司一年就没了呢"),
+        cm("char", "那我是不是就把最稳的一张牌扔掉了"),
+        cm("char", "我妈昨天还在跟我说 女孩子稳定一点好"),
+        cm("char", "我听着听着突然特别想哭"),
+        cm("char", "为什么长大后每个选择都像在失去什么"),
       ],
-      suggestedReplies: ["你自己内心真正想要什么？", "家人的期望和你的人生 哪个更重要？", "有没有两全的办法？"],
-      turnsInStage: 3,
+      suggestedReplies: ["你不是在发神经", "后悔比失败更难受", "可以先想最坏结果"],
+      turnsInStage: 2,
     },
     {
       id: "xy-decision",
-      description: "做出决定——根据整体对话倾向",
-      emotion: "下定决心",
-      advanceTrigger: "自动推进到结局",
+      description: "做出决定并表达感谢",
+      emotion: "释然、感激",
+      advanceTrigger: "阶段收尾",
       nextStageId: null,
+      endingId: "xy-e-job",
       openingMessages: [
-        timeSkip("—— 三天后 ——"),
-        cm("char", "！！"),
-        cm("char", "我做了决定"),
+        timeSkip("三天后"),
+        cm("char", "我想好了。"),
+        cm("char", "谢谢你前几天陪我聊那么久"),
+        cm("char", "真的有被你影响到"),
       ],
-      suggestedReplies: ["什么决定！", "说说看", "是什么？"],
+      suggestedReplies: ["你做了什么决定？", "恭喜你想清楚了", "我很开心能帮到你"],
       turnsInStage: 1,
-      // 结局由chat-engine根据对话历史的整体倾向决定
     },
   ];
 }
@@ -107,72 +109,76 @@ export function getHaoranStages(): StoryStage[] {
   return [
     {
       id: "hr-intro",
-      description: "深夜加好友，睡不着",
-      emotion: "焦躁、亢奋",
-      advanceTrigger: "用户做出任何回应",
+      description: "深夜加你，想聊退学创业",
+      emotion: "疲惫、兴奋",
+      advanceTrigger: "用户给予回应",
       nextStageId: "hr-dilemma",
       openingMessages: [
         sysMsg("陈浩然 请求添加你为好友"),
-        sysMsg("验证消息：朋友推荐 说你看问题很准"),
+        sysMsg("验证消息：朋友推荐的 说你挺会聊天"),
         sysMsg("—— 已添加好友 ——"),
-        cm("char", "不好意思这么晚", "text", 1500, 800),
-        cm("char", "睡不着 脑子一直在转"),
-        cm("char", "我叫陈浩然 金融研二"),
-        cm("char", "跟朋友做了个量化项目"),
-        cm("char", "上个月开始赚钱了 真金白银那种"),
-        cm("char", "然后问题就来了"),
+        cm("char", "这么晚打扰了"),
+        cm("char", "但我现在真的有点睡不着"),
+        cm("char", "我复旦金融硕士在读"),
+        cm("char", "最近在和学长做量化策略"),
+        cm("char", "结果…做得还不错"),
+        cm("char", "现在出现了一个很离谱的选择"),
       ],
-      suggestedReplies: ["什么问题？", "赚钱了不是好事吗", "说说看"],
-      turnsInStage: 2,
+      suggestedReplies: ["什么选择？", "你说", "我在"],
+      turnsInStage: 1,
     },
     {
       id: "hr-dilemma",
-      description: "核心困境：全职做项目vs完成学业",
-      emotion: "纠结、急迫",
-      advanceTrigger: "用户表达了看法",
+      description: "创业赚钱了，纠结要不要退学全职做",
+      emotion: "野心、焦虑",
+      advanceTrigger: "用户表达价值判断或追问细节",
       nextStageId: "hr-deep",
       openingMessages: [
-        cm("char", "合伙人说 窗口期就这一两年"),
-        cm("char", "要全职做 规模才能上去"),
-        cm("char", "但我开题报告下个月得交"),
-        cm("char", "导师已经问了我三次进度"),
-        cm("char", "女朋友觉得我疯了"),
-        cm("char", "说我一个学金融的 不好好毕业去搞什么量化"),
-        cm("char", "但上个月净赚了8万啊"),
-        cm("char", "读完研出来月薪可能都没这个数"),
+        cm("char", "我们的策略上个月净赚了8万"),
+        cm("char", "不是paper money 是真钱"),
+        cm("char", "合伙人说要不直接注册公司"),
+        cm("char", "我整个人都懵了"),
+        cm("char", "如果做起来 可能真的比读书快得多"),
+        cm("char", "但问题是 我还没毕业"),
+        cm("char", "退学创业这四个字 听起来就像疯子"),
+        cm("char", "我女朋友也觉得我疯了"),
       ],
-      suggestedReplies: ["8万确实挺猛的", "但市场不是一直涨的", "女朋友的担心也有道理"],
+      suggestedReplies: ["机会确实难得", "风险太大了", "你最看重什么"],
       turnsInStage: 2,
     },
     {
       id: "hr-deep",
-      description: "深入：风险、家庭、关系",
-      emotion: "真实、略显脆弱",
-      advanceTrigger: "聊到2-3轮后推进",
+      description: "聊到家庭/感情压力与自我认同",
+      emotion: "压抑、孤独",
+      advanceTrigger: "用户给出深层支持/建议",
       nextStageId: "hr-decision",
       openingMessages: [
-        cm("char", "我爸是公务员 我妈是老师"),
-        cm("char", "在他们的世界里"),
-        cm("char", "退学 = 人生完蛋"),
-        cm("char", "我理解 但我也知道"),
-        cm("char", "如果现在不做 以后会后悔"),
-        cm("char", "你说 一辈子能遇到几次这种机会"),
+        cm("char", "最难的是 我发现没有人真的能理解我在兴奋什么"),
+        cm("char", "我爸妈觉得读到研究生就该找个体面工作"),
+        cm("char", "女朋友觉得我是在赌"),
+        cm("char", "导师觉得我心浮气躁"),
+        cm("char", "但我自己知道 那不是赌"),
+        cm("char", "那是一种‘我可能真的能做成点什么’的感觉"),
+        cm("char", "可这种感觉 也特别容易让人上头"),
+        cm("char", "我现在最怕的是 我只是把野心误认成天赋"),
       ],
-      suggestedReplies: ["有没有不退学也能做的方案？", "机会以后还会有", "你自己觉得能承受最坏的结果吗？"],
-      turnsInStage: 3,
+      suggestedReplies: ["先看最坏结果", "年轻时试错成本低", "你可以给自己设止损"],
+      turnsInStage: 2,
     },
     {
       id: "hr-decision",
-      description: "做出决定",
-      emotion: "下定决心",
-      advanceTrigger: "自动推进",
+      description: "做出决定并告别",
+      emotion: "冷静、笃定",
+      advanceTrigger: "阶段收尾",
       nextStageId: null,
+      endingId: "hr-e-drop",
       openingMessages: [
-        timeSkip("—— 一周后 ——"),
-        cm("char", "兄弟"),
-        cm("char", "想了一周 做了决定"),
+        timeSkip("一周后"),
+        cm("char", "我做决定了"),
+        cm("char", "不管对错 至少今晚开始不会再反复横跳了"),
+        cm("char", "谢谢你 凌晨陪我聊这么多"),
       ],
-      suggestedReplies: ["说！", "什么决定", "怎么选的？"],
+      suggestedReplies: ["我尊重你的决定", "祝你顺利", "有消息记得告诉我"],
       turnsInStage: 1,
     },
   ];
@@ -186,172 +192,253 @@ export function getMomoStages(): StoryStage[] {
   return [
     {
       id: "mm-intro",
-      description: "安静地加好友，犹豫了很久",
-      emotion: "紧张、不确定",
-      advanceTrigger: "用户做出回应",
+      description: "文艺女孩突然来聊专业迷茫",
+      emotion: "低落、敏感",
+      advanceTrigger: "用户给予回应",
       nextStageId: "mm-dilemma",
       openingMessages: [
         sysMsg("苏默默 请求添加你为好友"),
-        sysMsg("验证消息：你好 看了你的文章 想请教点事"),
+        sysMsg("验证消息：朋友说你可能会懂这种迷茫"),
         sysMsg("—— 已添加好友 ——"),
-        cm("char", "你好", "text", 1500, 500),
-        cm("char", "谢谢你通过", "text", 1000, 400),
-        cm("char", "想了很久要不要找人聊这个"),
-        cm("char", "我学视觉传达 大三"),
-        cm("char", "最近有个很困扰我的事"),
-        cm("char", "我好像…不那么喜欢设计了"),
+        cm("char", "你好…打扰了"),
+        cm("char", "我今天在画室坐了一下午"),
+        cm("char", "结果一笔都没下去"),
+        cm("char", "我学视觉传达 快三年了"),
+        cm("char", "但最近越来越不确定 这是不是我真正想走的路"),
       ],
-      suggestedReplies: ["怎么突然这么想？", "也许只是一个阶段", "说说看呗"],
-      turnsInStage: 2,
+      suggestedReplies: ["怎么突然这么想？", "发生什么了", "你可以跟我说说"],
+      turnsInStage: 1,
     },
     {
       id: "mm-dilemma",
-      description: "核心困境：发现了对编程/产品的热爱",
-      emotion: "困惑、小兴奋",
-      advanceTrigger: "用户表达了看法",
+      description: "坦白自己爱上写代码，纠结是否转向",
+      emotion: "新鲜、愧疚",
+      advanceTrigger: "用户表达态度或追问细节",
       nextStageId: "mm-deep",
       openingMessages: [
-        cm("char", "上学期开始自学编程"),
-        cm("char", "做了一个小产品"),
-        cm("char", "一个记录情绪的app"),
-        cm("char", "虽然很粗糙"),
-        cm("char", "但做的时候特别开心"),
-        cm("char", "比做任何设计作业都开心"),
-        cm("char", "这正常吗……"),
-        cm("char", "学了三年突然说不喜欢了 是不是太任性了"),
+        cm("char", "其实我最近在偷偷学前端"),
+        cm("char", "一开始只是想给作品集做个网页"),
+        cm("char", "结果越学越上头"),
+        cm("char", "我第一次觉得 ‘原来我也能创造一个会动的东西’"),
+        cm("char", "但问题是 我已经大三了"),
+        cm("char", "现在说想转方向 感觉特别对不起这三年"),
+        cm("char", "而且我也不知道自己是真的喜欢编程"),
+        cm("char", "还是只是暂时逃避设计带来的挫败感"),
       ],
-      suggestedReplies: ["做的时候开心说明方向对了", "三年的积累不会浪费的", "你觉得自己真正喜欢的是什么？"],
+      suggestedReplies: ["喜欢就是线索", "先别急着否定过去", "你做了什么项目"],
       turnsInStage: 2,
     },
     {
       id: "mm-deep",
-      description: "深入：不是非此即彼",
-      emotion: "慢慢打开",
-      advanceTrigger: "聊2-3轮后推进",
+      description: "聊到自我价值、创造欲与未来想象",
+      emotion: "脆弱、试探",
+      advanceTrigger: "用户给出理解或方向建议",
       nextStageId: "mm-decision",
       openingMessages: [
-        cm("char", "写代码的时候那种感觉"),
-        cm("char", "从无到有创造出一个东西"),
-        cm("char", "设计也有创造 但不一样"),
-        cm("char", "编程是……写下一行代码 世界就多了一种可能"),
-        cm("char", "但转专业来不及了"),
-        cm("char", "考研换方向是三跨 基础几乎是零"),
-        cm("char", "有时候觉得自己什么都不是"),
+        cm("char", "我以前一直以为自己想做‘美的东西’"),
+        cm("char", "后来我发现 我更想做‘有用又有感觉的东西’"),
+        cm("char", "设计可以这样 代码也可以这样"),
+        cm("char", "可一想到要真的承认自己变了 又会害怕"),
+        cm("char", "好像一旦承认 就意味着过去那个我被否定了"),
+        cm("char", "你会不会觉得 人长大之后最难的就是允许自己改变"),
       ],
-      suggestedReplies: ["设计+代码结合起来不是更强？", "你不需要成为纯程序员", "零基础不代表学不会"],
-      turnsInStage: 3,
+      suggestedReplies: ["改变不等于否定过去", "你其实是在扩展自己", "可以走中间路线"],
+      turnsInStage: 2,
     },
     {
       id: "mm-decision",
-      description: "做出决定",
-      emotion: "释然",
-      advanceTrigger: "自动推进",
+      description: "做出属于自己的选择",
+      emotion: "平静、感激",
+      advanceTrigger: "阶段收尾",
       nextStageId: null,
+      endingId: "mm-e-switch",
       openingMessages: [
-        timeSkip("—— 一个月后 ——"),
-        cm("char", "嗨"),
-        cm("char", "跟你说一个事"),
+        timeSkip("几天后"),
+        cm("char", "我想通了一些事"),
+        cm("char", "谢谢你没有用‘应该’来定义我"),
+        cm("char", "那种被理解的感觉 很少见"),
       ],
-      suggestedReplies: ["什么事！", "说说看", "好消息吗？"],
+      suggestedReplies: ["你值得被理解", "我很高兴你想通了", "祝你走向想去的地方"],
       turnsInStage: 1,
     },
   ];
 }
 
-// =================================================================
-// 结局定义
-// =================================================================
-export function getEndingsForCharacter(charId: string): { endings: Map<string, Ending>; comparisons: EndingComparison[] } {
-  const endings = new Map<string, Ending>();
-  let comparisons: EndingComparison[] = [];
-
-  if (charId === "xiaoyu") {
-    endings.set("xy-e-job", {
-      id: "xy-e-job", title: "勇敢者的奖赏", emoji: "🚀",
-      description: "她接了创业公司的offer。妈妈哭了，但最后说了一句「妈只希望你开心」。一年后，公司拿到了A轮。",
-      stats: { "幸福": 82, "成长": 95, "稳定": 45, "勇气": 95, "连接": 78 },
-      insight: "你没有替她做选择，但你让她敢于承认自己真正想要什么。有时候，一个陌生人的理解比十个亲人的建议更管用。",
-    });
-    endings.set("xy-e-pg", {
-      id: "xy-e-pg", title: "细水长流", emoji: "📚",
-      description: "她选了保研。拒offer时，CEO说「门永远为你开着」。一年后workshop paper中了，她发现了一些之前不知道喜欢的东西。",
-      stats: { "幸福": 73, "成长": 78, "稳定": 90, "勇气": 55, "连接": 65 },
-      insight: "你帮她看到了稳妥选择背后的价值。不是每段路都要轰轰烈烈。",
-    });
-    endings.set("xy-e-both", {
-      id: "xy-e-both", title: "第三种可能", emoji: "✨",
-      description: "她和CEO商量：先保研，同时以实习身份加入。导师也同意了。一年后，公司产品上了App Store推荐榜，论文也有了方向。",
-      stats: { "幸福": 88, "成长": 92, "稳定": 75, "勇气": 85, "连接": 92 },
-      insight: "你没有让她选A或B，而是帮她想到了C。最好的朋友不替你做决定，而是帮你看到更多可能性。",
-    });
-    comparisons = [
-      { endingId: "xy-e-job", title: "勇敢者的奖赏", description: "她去了创业公司", alternateText: "如果你当时支持她追随内心，她会勇敢迈出那一步" },
-      { endingId: "xy-e-pg", title: "细水长流", description: "她选了保研", alternateText: "如果你当时建议她求稳，她会安心走学术路" },
-      { endingId: "xy-e-both", title: "第三种可能", description: "她找到了两全之策", alternateText: "如果你帮她跳出二选一的框架，她会创造新的路" },
-    ];
-  }
-
-  if (charId === "haoran") {
-    endings.set("hr-e-drop", {
-      id: "hr-e-drop", title: "All In", emoji: "🎲",
-      description: "他办了休学。中间有两个月亏得心态崩了，但扛过来了。半年后管理规模上了3000万，注册了公司。",
-      stats: { "幸福": 78, "成长": 98, "稳定": 30, "勇气": 95, "连接": 72 },
-      insight: "你在凌晨两点的一句「去试试」，让他有了跨出去的勇气。年轻时的试错成本，永远比你想的低。",
-    });
-    endings.set("hr-e-mid", {
-      id: "hr-e-mid", title: "两条腿走路", emoji: "⚖️",
-      description: "他交了开题报告，项目由学长白天盯，他晚上和周末全力做。累但平衡。半年后规模稳步增长到500万。",
-      stats: { "幸福": 80, "成长": 85, "稳定": 72, "勇气": 75, "连接": 82 },
-      insight: "你帮他看到了不用全赌一边的可能性。平衡本身就是一种被低估的能力。",
-    });
-    endings.set("hr-e-stay", {
-      id: "hr-e-stay", title: "理性的力量", emoji: "🛡️",
-      description: "他暂停了项目，先安心做论文。后来市场回撤了不少。他把经历写成了case study，导师还夸他有实践经验。",
-      stats: { "幸福": 73, "成长": 70, "稳定": 95, "勇气": 50, "连接": 65 },
-      insight: "你帮他在冲动的时候冷静下来。有时候不做选择也是一种选择——而且是正确的。",
-    });
-    comparisons = [
-      { endingId: "hr-e-drop", title: "All In", description: "他休学创业了", alternateText: "如果你鼓励他冒险，他会选择休学全力一搏" },
-      { endingId: "hr-e-mid", title: "两条腿走路", description: "他找到了平衡", alternateText: "如果你帮他想到折中方案，他会学业创业两手抓" },
-      { endingId: "hr-e-stay", title: "理性的力量", description: "他先完成学业", alternateText: "如果你提醒他风险，他会选择先把学位拿到" },
-    ];
-  }
-
-  if (charId === "momo") {
-    endings.set("mm-e-switch", {
-      id: "mm-e-switch", title: "破茧", emoji: "🦋",
-      description: "她考研报了交互设计方向。八个月，每天五点起来背英语。出分那天——她过线了。浙大。",
-      stats: { "幸福": 85, "成长": 95, "稳定": 50, "勇气": 95, "连接": 72 },
-      insight: "你让她相信了「喜欢就是最好的理由」。三年的设计基础不是沉没成本，而是她与众不同的起点。",
-    });
-    endings.set("mm-e-indie", {
-      id: "mm-e-indie", title: "独立创造者", emoji: "🎨",
-      description: "她把情绪app放到了小红书上介绍，500多人想试用。后来被一个投资人看到了。设计+代码，1+1>2。",
-      stats: { "幸福": 88, "成长": 90, "稳定": 58, "勇气": 82, "连接": 88 },
-      insight: "你帮她发现了自己最独特的定位——不是设计师也不是程序员，而是两者结合的创造者。这比选A或B都强。",
-    });
-    endings.set("mm-e-stay", {
-      id: "mm-e-stay", title: "隐藏技能", emoji: "✏️",
-      description: "她留在了设计，但把编程当作秘密武器。毕设主题是「情绪可视化」，导师说：有技术思维的设计师很稀缺。",
-      stats: { "幸福": 75, "成长": 75, "稳定": 88, "勇气": 55, "连接": 70 },
-      insight: "你帮她在不颠覆现有路径的情况下找到了新的可能。一项隐藏技能，往往比一次彻底转型更持久。",
-    });
-    comparisons = [
-      { endingId: "mm-e-switch", title: "破茧", description: "她跨考了交互设计", alternateText: "如果你鼓励她大胆转方向，她会三跨考研" },
-      { endingId: "mm-e-indie", title: "独立创造者", description: "她做了独立产品", alternateText: "如果你帮她看到设计+代码的结合点，她会走独立创造的路" },
-      { endingId: "mm-e-stay", title: "隐藏技能", description: "她留在设计，代码当副业", alternateText: "如果你建议她别急着转，编程会成为她的秘密武器" },
-    ];
-  }
-
-  return { endings, comparisons };
+export function getStagesForCharacter(characterId: string): StoryStage[] {
+  if (characterId === "xiaoyu") return getXiaoyuStages();
+  if (characterId === "haoran") return getHaoranStages();
+  return getMomoStages();
 }
 
-// 获取角色的剧情阶段
-export function getStagesForCharacter(charId: string): StoryStage[] {
-  switch (charId) {
-    case "xiaoyu": return getXiaoyuStages();
-    case "haoran": return getHaoranStages();
-    case "momo": return getMomoStages();
-    default: return getXiaoyuStages();
-  }
+const endings: Record<string, Ending[]> = {
+  xiaoyu: [
+    {
+      id: "xy-e-job",
+      title: "去真实世界的人",
+      emoji: "🌆",
+      description: "她选择了那家创业公司。忙、累、常常怀疑自己，但也第一次真切地觉得，生活是自己一行一行写出来的。",
+      stats: { 勇气: 92, 稳定: 45, 成长: 95 },
+      insight: "有些路在地图上并不好看，但走上去之后，风才会迎面吹来。",
+    },
+    {
+      id: "xy-e-pg",
+      title: "留在安全答案里的人",
+      emoji: "📚",
+      description: "她选择了保研。生活变得可预期，也获得了家人的认同，只是在某些深夜，她仍会想起那个差点走向的世界。",
+      stats: { 勇气: 55, 稳定: 93, 成长: 72 },
+      insight: "稳定不是错，只是有时，遗憾会比风险更安静地待得更久。",
+    },
+    {
+      id: "xy-e-both",
+      title: "给自己留一扇门的人",
+      emoji: "🪟",
+      description: "她没有彻底二选一，而是先用自己的方式靠近真实世界，也给学术保留了一条退路。慢一点，但更像她。",
+      stats: { 勇气: 78, 稳定: 78, 成长: 84 },
+      insight: "不是所有选择都必须决绝，有时第三条路，才最接近自己。",
+    },
+  ],
+  haoran: [
+    {
+      id: "hr-e-drop",
+      title: "把野心变成方向的人",
+      emoji: "📈",
+      description: "他决定休学创业。没有人能保证结果，但他第一次认真地把自己的欲望当成了命题，而不是偏差。",
+      stats: { 勇气: 95, 稳定: 40, 成长: 92 },
+      insight: "真正让人睡不着的，从来不只是风险，还有被自己压住的那团火。",
+    },
+    {
+      id: "hr-e-stay",
+      title: "先把根扎稳的人",
+      emoji: "🏫",
+      description: "他没有退学，而是先把学业收住，把创业按在副线里。慢下来之后，他反而看清了什么是长期主义。",
+      stats: { 勇气: 52, 稳定: 94, 成长: 76 },
+      insight: "不是每一次后撤都是怯懦，有时是为了不让一时冲动替你做完一生的决定。",
+    },
+    {
+      id: "hr-e-mid",
+      title: "在锋利和克制之间的人",
+      emoji: "⚖️",
+      description: "他给自己设了时间和止损，把创业当成一次可控试错。没有完全豁出去，但也没让自己后悔。",
+      stats: { 勇气: 80, 稳定: 80, 成长: 86 },
+      insight: "成熟不是磨平野心，而是学会让它有边界地燃烧。",
+    },
+  ],
+  momo: [
+    {
+      id: "mm-e-switch",
+      title: "允许自己变的人",
+      emoji: "💻",
+      description: "她决定认真转向交互与代码，把设计感留在骨子里，把新语言写进未来。她终于不再为‘改变’道歉。",
+      stats: { 勇气: 90, 稳定: 58, 成长: 94 },
+      insight: "成长不是背叛过去的自己，而是让那个自己拥有新的表达方式。",
+    },
+    {
+      id: "mm-e-stay",
+      title: "把热爱留在旁边的人",
+      emoji: "🎨",
+      description: "她仍旧留在原本的专业里，把代码当作辅助工具。没有大转弯，但世界被她悄悄拓宽了一点。",
+      stats: { 勇气: 58, 稳定: 90, 成长: 74 },
+      insight: "不是所有热爱都要立刻成为职业，有些会先以支线的形式，慢慢救回你。",
+    },
+    {
+      id: "mm-e-indie",
+      title: "自己发明道路的人",
+      emoji: "🌱",
+      description: "她没有把自己放进单一标签里，而是去做设计与编程之间的新东西。路不标准，但她第一次觉得轻盈。",
+      stats: { 勇气: 84, 稳定: 76, 成长: 89 },
+      insight: "当已有的选项都不像你时，也许真正的答案，是自己命名一种人生。",
+    },
+  ],
+};
+
+const endingComparisons: Record<string, EndingComparison[]> = {
+  xiaoyu: [
+    {
+      endingId: "xy-e-job",
+      title: "如果她没去那家公司",
+      description: "她可能会拥有一条更平顺的履历，也更少争执。但那种‘我真的为自己活过一次’的光，会暗一点。",
+      alternateText: "有些决定的价值，不在结果，而在它有没有让人更像自己。",
+      outcome: {
+        title: "留在安全答案里的人",
+        emoji: "📚",
+        description: "她选择了保研。生活更可预期，也更容易获得认同，只是偶尔还会想起另一个可能发生的自己。",
+        stats: { 勇气: 55, 稳定: 93, 成长: 72 },
+      },
+    },
+    {
+      endingId: "xy-e-both",
+      title: "如果她想先两边都试试看",
+      description: "她会走得更慢一点，但也给自己留出了更柔软的试错空间。",
+      alternateText: "有时候不把门一次性关死，本身就是一种很成熟的勇敢。",
+      outcome: {
+        title: "给自己留一扇门的人",
+        emoji: "🪟",
+        description: "她先靠近真实世界，也给学术留了一条退路，慢一点，却更像她。",
+        stats: { 勇气: 78, 稳定: 78, 成长: 84 },
+      },
+    },
+  ],
+  haoran: [
+    {
+      endingId: "hr-e-drop",
+      title: "如果他没有休学",
+      description: "他会活得更稳，也更像别人期待中的样子。只是某些深夜，他还是会想起那个本来可能发生的版本。",
+      alternateText: "人生里最安静的损耗，常常是长期压抑真正想成为的那个人。",
+      outcome: {
+        title: "先把根扎稳的人",
+        emoji: "🏫",
+        description: "他没有退学，而是先把学业收住，把创业按在副线里，慢下来后看清了长期主义。",
+        stats: { 勇气: 52, 稳定: 94, 成长: 76 },
+      },
+    },
+    {
+      endingId: "hr-e-mid",
+      title: "如果他给自己设了边界再冲",
+      description: "他不会完全豁出去，但也不会把那团火直接按灭。",
+      alternateText: "真正成熟的野心，不是收回去，而是学会被自己驯服。",
+      outcome: {
+        title: "在锋利和克制之间的人",
+        emoji: "⚖️",
+        description: "他设了时间和止损，把创业当成一次可控试错，没有全赌，也没有后悔。",
+        stats: { 勇气: 80, 稳定: 80, 成长: 86 },
+      },
+    },
+  ],
+  momo: [
+    {
+      endingId: "mm-e-switch",
+      title: "如果她继续按原路走",
+      description: "她也许依然能做出不错的作品，但那个刚刚被点亮的新世界，会渐渐变成一个‘差点发生过’的故事。",
+      alternateText: "不是每个人都必须按原计划长大，有些偏航，本身就是抵达。",
+      outcome: {
+        title: "把热爱留在旁边的人",
+        emoji: "🎨",
+        description: "她仍留在原本的专业里，把代码当成辅助工具，世界被她悄悄拓宽了一点。",
+        stats: { 勇气: 58, 稳定: 90, 成长: 74 },
+      },
+    },
+    {
+      endingId: "mm-e-indie",
+      title: "如果她决定发明自己的路",
+      description: "她不会急着把自己塞回单一标签里，而是去做设计与编程之间的新东西。",
+      alternateText: "当现成选项都不像你时，也许答案是自己命名一种人生。",
+      outcome: {
+        title: "自己发明道路的人",
+        emoji: "🌱",
+        description: "她不把自己放进单一标签里，转而做设计与编程之间的新东西，轻盈又独特。",
+        stats: { 勇气: 84, 稳定: 76, 成长: 89 },
+      },
+    },
+  ],
+};
+
+export function getEndingsForCharacter(characterId: string): {
+  endings: Map<string, Ending>;
+  comparisons: EndingComparison[];
+} {
+  const list = endings[characterId] || [];
+  return {
+    endings: new Map(list.map((e) => [e.id, e])),
+    comparisons: endingComparisons[characterId] || [],
+  };
 }

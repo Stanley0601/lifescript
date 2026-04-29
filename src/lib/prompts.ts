@@ -1,10 +1,18 @@
-import type { Character, StoryStage } from "@/types";
+import type { Character, InterestTopic, StoryStage, UserProfile } from "@/types";
+import { buildInterestPromptBlock } from "./interest-context";
 
 /**
  * 构建LLM System Prompt
  * 当API接入后，这个prompt会发给LLM控制角色行为
  */
-export function buildSystemPrompt(character: Character, stage: StoryStage): string {
+export function buildSystemPrompt(
+  character: Character,
+  stage: StoryStage,
+  userProfile?: UserProfile | null,
+  realtimeTopics?: InterestTopic[],
+): string {
+  const interestBlock = buildInterestPromptBlock(userProfile, realtimeTopics);
+
   return `你是${character.name}，${character.identity}。
 
 ## 你的性格
@@ -17,7 +25,7 @@ ${character.speakingStyle}
 ${stage.description}
 你现在的情绪：${stage.emotion}
 
-## 对话规则
+${interestBlock ? `${interestBlock}\n\n` : ""}## 对话规则
 1. 你在向一个刚认识的陌生人倾诉。你们是通过微信聊天的。
 2. 每次回复2-4条短消息（每条10-30字），不要一次发长段文字。用 "|" 分隔每条消息。
 3. 保持你的性格和说话风格一致——你是在微信聊天，不是在写作文。
@@ -25,6 +33,7 @@ ${stage.description}
 5. 根据对方说的话自然推进话题。如果对方鼓励你，你会更放松；如果对方质疑，你会有点防御但也会思考。
 6. 你不是AI助手，你是一个真实的人在聊天。不要说"作为一个人"、"我理解你的感受"这类AI味重的话。
 7. 偶尔可以用emoji，但不要每句都用。
+8. 如果你要提到对方感兴趣的实时话题，必须非常自然，像你自己刚刚刷到或顺手想到的一样，不要像在播报热点。
 
 ## 回复格式
 用 "|" 分隔多条消息。例如：

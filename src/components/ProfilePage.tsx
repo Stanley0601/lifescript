@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Character, CharacterStatus } from "@/types";
 import { QQ_BLUE, QQ_BG } from "@/lib/constants";
+import { getRelationshipColor, getRelationshipDescription, getRelationshipMilestone } from "@/lib/relationship-context";
 
 export default function ProfilePage({ char, status, onBack, onViewTimeline }: {
   char: Character; status: CharacterStatus; onBack: () => void; onViewTimeline?: () => void;
@@ -58,6 +59,57 @@ export default function ProfilePage({ char, status, onBack, onViewTimeline }: {
               <span className="text-[14px]" style={{ color: status.hasFinished ? "#999" : "#10b981" }}>
                 {status.hasFinished ? "故事已结束" : status.onlineStatus}
               </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[13px] text-[#999]">你们的关系</p>
+            <span
+              className="text-[11px] px-2.5 py-1 rounded-full text-white"
+              style={{ background: getRelationshipColor(status.relationshipStage) }}
+            >
+              {status.relationshipStage || "陌生"}
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <div className="flex items-center justify-between text-[12px] text-[#8a94a6] mb-1.5">
+                <span>熟悉度</span>
+                <span>{status.familiarity || 0}%</span>
+              </div>
+              <div className="h-[7px] rounded-full bg-[#eef2f6] overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${status.familiarity || 0}%`, background: QQ_BLUE }} />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between text-[12px] text-[#8a94a6] mb-1.5">
+                <span>心动值</span>
+                <span>{status.chemistry || 0}%</span>
+              </div>
+              <div className="h-[7px] rounded-full bg-[#f4eef7] overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${status.chemistry || 0}%`, background: getRelationshipColor(status.relationshipStage) }} />
+              </div>
+            </div>
+
+            <div className="rounded-xl px-3 py-3" style={{ background: "#f8fafc" }}>
+              <p className="text-[13px] text-[#4b5563] leading-relaxed">{getRelationshipDescription({
+                characterId: char.id,
+                familiarity: status.familiarity || 0,
+                chemistry: status.chemistry || 0,
+                stage: status.relationshipStage || "陌生",
+                weather: null,
+              })}</p>
+              <p className="text-[12px] text-[#94a3b8] mt-2 leading-relaxed">{getRelationshipMilestone({
+                characterId: char.id,
+                familiarity: status.familiarity || 0,
+                chemistry: status.chemistry || 0,
+                stage: status.relationshipStage || "陌生",
+                weather: null,
+              })}</p>
             </div>
           </div>
         </div>

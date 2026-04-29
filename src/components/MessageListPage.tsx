@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { CharacterStatus } from "@/types";
 import { getCharacter } from "@/lib/characters";
 import Avatar from "./Avatar";
-import { USER_AVATAR } from "@/lib/constants";
+import { QQ_BLUE, USER_AVATAR } from "@/lib/constants";
 
 export default function MessageListPage({ statuses, onSelectChat, onSelectProfile }: {
   statuses: CharacterStatus[];
@@ -14,8 +14,6 @@ export default function MessageListPage({ statuses, onSelectChat, onSelectProfil
 }) {
   return (
     <div className="flex-1 overflow-y-auto" style={{ background: "#ffffff" }}>
-
-      {/* === 顶部：头像 + 昵称 + 状态 + 加号 === */}
       <div className="flex items-center justify-between px-[16px] pt-[14px] pb-[8px]">
         <div className="flex items-center gap-[10px]">
           <div className="w-[38px] h-[38px] rounded-full overflow-hidden flex-shrink-0">
@@ -39,7 +37,6 @@ export default function MessageListPage({ statuses, onSelectChat, onSelectProfil
         </button>
       </div>
 
-      {/* === 搜索栏 === */}
       <div className="px-[16px] pt-[4px] pb-[10px]">
         <div className="flex items-center justify-center gap-[6px] h-[36px] rounded-full"
           style={{ background: "#f2f3f5" }}>
@@ -51,38 +48,88 @@ export default function MessageListPage({ statuses, onSelectChat, onSelectProfil
         </div>
       </div>
 
-      {/* === 消息列表 === */}
       <div>
         {statuses.map((s) => {
           const char = getCharacter(s.characterId);
           if (!char) return null;
           return (
-            <div key={s.characterId}
+            <motion.div key={s.characterId}
               className="flex items-center px-[16px] active:bg-[#f5f5f5]"
               style={{ height: 72, borderBottom: "0.5px solid #f0f0f0" }}
-              onClick={() => onSelectChat(s.characterId)}>
+              onClick={() => onSelectChat(s.characterId)}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}>
 
-              {/* 头像 52px 正圆 */}
               <div className="flex-shrink-0 mr-[12px]"
                 onClick={(e) => { e.stopPropagation(); onSelectProfile(s.characterId); }}>
                 <Avatar src={char.avatarImg} alt={char.name} size={52} />
               </div>
 
-              {/* 中间：名字 + 预览 */}
               <div className="flex-1 min-w-0 py-[2px]">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-[17px] font-medium text-[#1a1a1a] truncate leading-none">{char.name}</span>
+                  <div className="min-w-0 flex items-center gap-[6px]">
+                    <span className="text-[17px] font-medium text-[#1a1a1a] truncate leading-none">{char.name}</span>
+                    {s.isProactiveInterest && s.proactiveTag && (
+                      <span
+                        className="flex-shrink-0 text-[10px] px-[6px] py-[2px] rounded-full leading-none"
+                        style={{ background: `${QQ_BLUE}14`, color: QQ_BLUE }}
+                      >
+                        懂你 · {s.proactiveTag}
+                      </span>
+                    )}
+                  </div>
                   <span className="text-[12px] text-[#c8c8c8] flex-shrink-0 ml-[8px] leading-none">{s.lastMessageTime}</span>
                 </div>
-                <div className="mt-[6px]">
-                  <span className="text-[14px] text-[#b0b0b0] truncate block leading-none">{s.lastMessage}</span>
+                <div className="mt-[6px] flex items-center gap-[6px] flex-wrap">
+                  {s.freshnessLabel && (
+                    <span className="text-[10px] px-[5px] py-[2px] rounded-full leading-none bg-[#f5f6f8] text-[#98a2b3]">
+                      {s.freshnessLabel}
+                    </span>
+                  )}
+                  {s.relationshipStage && (
+                    <span className="text-[10px] px-[5px] py-[2px] rounded-full leading-none bg-[#fff3f7] text-[#d9778f]">
+                      {s.relationshipStage}
+                    </span>
+                  )}
+                  {typeof s.affinityScore === "number" && (
+                    <div className="flex items-center gap-[5px]">
+                      <span className="text-[10px] text-[#b3bfcc] leading-none">契合度</span>
+                      <div className="w-[44px] h-[4px] rounded-full bg-[#eef2f6] overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${s.affinityScore}%`, background: QQ_BLUE }} />
+                      </div>
+                    </div>
+                  )}
+                  {typeof s.familiarity === "number" && (
+                    <span className="text-[10px] text-[#b3bfcc] leading-none">熟悉度 {s.familiarity}%</span>
+                  )}
                 </div>
+                <div className="mt-[6px]">
+                  <span
+                    className="text-[14px] truncate block leading-none"
+                    style={{ color: s.isProactiveInterest ? "#5f6b7a" : "#b0b0b0" }}
+                  >
+                    {s.lastMessage}
+                  </span>
+                </div>
+                {s.interestSummary && (
+                  <div className="mt-[6px] flex items-center gap-[5px]">
+                    <span className="text-[10px] px-[5px] py-[2px] rounded-full leading-none"
+                      style={{ background: "#f5f8fc", color: "#8fa2b8" }}>
+                      兴趣画像
+                    </span>
+                    <span className="text-[11px] text-[#a6b4c4] truncate leading-none">{s.interestSummary}</span>
+                  </div>
+                )}
+                {s.recommendedReason && (
+                  <div className="mt-[5px]">
+                    <span className="text-[11px] text-[#8fa2b8] truncate block leading-none">{s.recommendedReason}</span>
+                  </div>
+                )}
               </div>
 
-              {/* 未读 */}
               {s.unreadCount > 0 && (
                 <div className="flex-shrink-0 ml-[8px] min-w-[20px] h-[20px] px-[5px] rounded-full flex items-center justify-center"
-                  style={{ background: "#FA5151" }}>
+                  style={{ background: s.isProactiveInterest ? QQ_BLUE : "#FA5151" }}>
                   <span className="text-[11px] text-white font-bold leading-none">
                     {s.unreadCount > 99 ? "99+" : s.unreadCount}
                   </span>
@@ -91,11 +138,10 @@ export default function MessageListPage({ statuses, onSelectChat, onSelectProfil
               {s.hasFinished && !s.unreadCount && (
                 <span className="flex-shrink-0 ml-[8px] text-[11px] px-[6px] py-[2px] rounded bg-[#f2f3f5] text-[#b0b0b0]">已结束</span>
               )}
-            </div>
+            </motion.div>
           );
         })}
 
-        {/* QQ提醒 行 */}
         <div className="flex items-center px-[16px]"
           style={{ height: 72, borderBottom: "0.5px solid #f0f0f0" }}>
           <div className="flex-shrink-0 mr-[12px] w-[52px] h-[52px] rounded-full flex items-center justify-center"
@@ -117,7 +163,6 @@ export default function MessageListPage({ statuses, onSelectChat, onSelectProfil
           </div>
         </div>
 
-        {/* QQ安全中心 行 */}
         <div className="flex items-center px-[16px]"
           style={{ height: 72, borderBottom: "0.5px solid #f0f0f0" }}>
           <div className="flex-shrink-0 mr-[12px] w-[52px] h-[52px] rounded-full flex items-center justify-center"

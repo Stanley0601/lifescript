@@ -130,6 +130,12 @@ async function callLLM(body: ChatApiRequest): Promise<NextResponse> {
     parts = [cleanContent];
   }
 
+  // 过滤掉图片描述（LLM有时会幻觉出[图片：xxx]这样的内容）
+  parts = parts
+    .map(p => p.replace(/\[图片[：:].*?\]/g, "").replace(/\[照片.*?\]/g, "").replace(/（发了.*?）/g, "").trim())
+    .filter(p => p.length > 0);
+  if (parts.length === 0) parts = ["嗯嗯"];
+
   return NextResponse.json({
     replies: parts.map((text: string, i: number) => ({
       text,

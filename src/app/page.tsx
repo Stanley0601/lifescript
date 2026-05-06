@@ -625,7 +625,7 @@ export default function Home() {
                 onAddComment={handleAddComment}
               />
             )}
-            {tab === "profile" && <MyProfileTab userProfile={userProfile} onResetAll={handleResetAll} onUpdateNickname={(name) => setUserProfile(prev => prev ? { ...prev, nickname: name } : prev)} onUpdateAvatar={(url) => setUserProfile(prev => prev ? { ...prev, avatar: url } : prev)} />}
+            {tab === "profile" && <MyProfileTab userProfile={userProfile} onResetAll={handleResetAll} onUpdateNickname={(name) => setUserProfile(prev => ({ ...(prev || { interestTags: [], updatedAt: Date.now() }), nickname: name }))} onUpdateAvatar={(url) => setUserProfile(prev => ({ ...(prev || { interestTags: [], updatedAt: Date.now() }), avatar: url }))} />}
             <BottomTabBar current={tab} onChange={setTab} unreadTotal={unreadTotal} />
           </motion.div>
         )}

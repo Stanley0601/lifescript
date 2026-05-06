@@ -143,7 +143,7 @@ export default function MyProfileTab({ userProfile, onResetAll, onUpdateNickname
       </div>
 
       <div className="text-center text-[13px] text-[#ddd] pb-8">
-        <p>人生剧本 LifeScript · QQ社交</p>
+        <p>灵犀 Linxi · QQ社交</p>
       </div>
     </div>
   );

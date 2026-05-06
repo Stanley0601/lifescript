@@ -330,9 +330,9 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3" style={{ background: "#f5f5f5" }}>
-        <div className="max-w-lg mx-auto space-y-5">
-          {displayed.map(msg => <MsgBubble key={msg.id} msg={msg} charImg={char.avatarImg} charName={char.name} />)}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4" style={{ background: "#f5f5f5" }}>
+        <div className="max-w-lg mx-auto space-y-8">
+          {displayed.map(msg => <MsgBubble key={msg.id} msg={msg} charImg={char.avatarImg} charName={char.name} charId={char.id} />)}
           {typing && <TypingBubble charImg={char.avatarImg} charName={char.name} />}
         </div>
       </div>
@@ -352,38 +352,42 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
         )}
       </AnimatePresence>
 
-      <div className="flex-shrink-0 z-20 px-4 pt-3 pb-8 safe-area-bottom" style={{ background: "#ffffff", borderTop: "0.5px solid #ebebeb" }}>
-        {userTurn ? (
-          <motion.div className="flex gap-2.5 items-end max-w-lg mx-auto"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="flex-1">
-              <input ref={inputRef} type="text" value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleSend()}
-                className="w-full px-4 py-2.5 rounded-full text-[15px] border outline-none focus:border-[#ccc] focus:ring-2 focus:ring-[#12b7f5]/20"
-                style={{ lineHeight: "1.5", background: "#f2f3f5", borderColor: "#e8e8e8" }}
-                placeholder="说点什么..."
-                autoFocus />
-            </div>
-            <button onClick={() => handleSend()}
-              className="px-5 py-2.5 rounded-full text-[15px] font-medium text-white flex-shrink-0"
-              style={{ background: input.trim() ? "#0099FF" : "#c0c0c0" }}
-              disabled={!input.trim()}>
-              发送
-            </button>
-          </motion.div>
-        ) : (
-          <div className="flex gap-2.5 items-center max-w-lg mx-auto">
-            <div className="flex-1 px-4 py-2.5 rounded-full text-[14px] text-[#999] flex items-center gap-2" style={{ background: "#f2f3f5" }}>
-              <span className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "300ms" }} />
-              </span>
-              <span>对方正在输入</span>
-            </div>
+      <div className="flex-shrink-0 z-20 px-4 pt-2 pb-8 safe-area-bottom" style={{ background: "#ffffff", borderTop: "0.5px solid #ebebeb" }}>
+        {/* 对方正在输入提示 */}
+        {!userTurn && typing && (
+          <div className="flex items-center gap-1.5 mb-2 ml-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "0ms" }} />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "150ms" }} />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "300ms" }} />
+            <span className="text-[12px] text-[#aaa] ml-1">对方正在输入</span>
           </div>
         )}
+        {/* 输入框始终可用 */}
+        <div className="flex gap-2.5 items-center max-w-lg mx-auto">
+          <div className="flex-1 relative">
+            <input ref={inputRef} type="text" value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSend()}
+              className="w-full px-4 py-3 rounded-2xl text-[15px] outline-none transition-all"
+              style={{
+                background: input ? "#fff" : "#f2f3f5",
+                border: input ? "1.5px solid #12b7f5" : "1.5px solid #eee",
+                boxShadow: input ? "0 0 0 3px rgba(18,183,245,0.1)" : "none",
+              }}
+              placeholder="输入消息..." />
+            {input && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-[#12b7f5]">
+                {input.length}字
+              </span>
+            )}
+          </div>
+          <button onClick={() => handleSend()}
+            className="px-5 py-3 rounded-2xl text-[15px] font-medium text-white flex-shrink-0 transition-all"
+            style={{ background: input.trim() ? "#12b7f5" : "#ddd" }}
+            disabled={!input.trim()}>
+            发送
+          </button>
+        </div>
       </div>
     </motion.div>
   );

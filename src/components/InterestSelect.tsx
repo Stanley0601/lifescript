@@ -136,7 +136,7 @@ export default function InterestSelect({
               opacity: canContinue ? 1 : 0.6,
             }}
           >
-            开始进入她的人生剧本
+            开始进入她的灵犀
           </button>
         </motion.div>
       </div>

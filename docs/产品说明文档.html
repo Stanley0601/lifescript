@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人生剧本 LifeScript - 产品说明文档</title>
+<title>灵犀 Linxi - 产品说明文档</title>
 <style>
 @page { size: A4; margin: 2cm; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,45 +16,31 @@ body {
 }
 .page { page-break-after: always; padding: 40px 50px; min-height: 100vh; }
 .page:last-child { page-break-after: avoid; }
-
-/* Cover */
 .cover {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; min-height: 100vh;
   background: linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%);
 }
-.cover h1 { font-size: 42px; font-weight: 700; color: #12b7f5; margin-bottom: 12px; }
-.cover .subtitle { font-size: 20px; color: #333; margin-bottom: 8px; }
-.cover .tagline { font-size: 15px; color: #666; margin-bottom: 40px; }
+.cover h1 { font-size: 48px; font-weight: 700; color: #12b7f5; margin-bottom: 8px; }
+.cover .subtitle { font-size: 18px; color: #555; margin-bottom: 40px; }
 .cover .meta { font-size: 13px; color: #999; line-height: 2.2; }
 .cover .badge { display: inline-block; padding: 6px 16px; border-radius: 20px; background: #12b7f5; color: white; font-size: 14px; font-weight: 500; margin-bottom: 30px; }
-
-/* Sections */
 h2 { font-size: 22px; font-weight: 700; color: #12b7f5; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #12b7f5; }
 h3 { font-size: 17px; font-weight: 600; color: #333; margin: 20px 0 10px; }
 p { margin-bottom: 12px; }
 ul, ol { margin: 8px 0 16px 20px; }
 li { margin-bottom: 6px; }
-
-/* Table */
 table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
 th, td { padding: 10px 12px; border: 1px solid #e5e5e5; text-align: left; }
 th { background: #f0f9ff; color: #12b7f5; font-weight: 600; }
-tr:nth-child(even) td { background: #fafafa; }
-
-/* Highlight box */
 .highlight { background: #f0f9ff; border-left: 4px solid #12b7f5; padding: 16px 20px; margin: 16px 0; border-radius: 0 8px 8px 0; }
 .highlight p { margin: 0; }
-
-/* Architecture diagram placeholder */
-.arch-box { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 16px 0; text-align: center; }
-.arch-box code { display: block; text-align: left; font-size: 12px; line-height: 1.6; white-space: pre; font-family: "SF Mono", "Fira Code", monospace; }
-
-/* Stats */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
 .stat-card { background: #f8faff; border: 1px solid #e8f0fe; border-radius: 8px; padding: 16px; text-align: center; }
 .stat-card .num { font-size: 28px; font-weight: 700; color: #12b7f5; }
 .stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+.pain-box { background: #fff5f5; border-left: 4px solid #ff6b6b; padding: 12px 16px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+.solve-box { background: #f0fff4; border-left: 4px solid #10b981; padding: 12px 16px; margin: 10px 0; border-radius: 0 8px 8px 0; }
 </style>
 </head>
 <body>
@@ -62,228 +48,165 @@ tr:nth-child(even) td { background: #fafafa; }
 <!-- 封面 -->
 <div class="page cover">
   <div class="badge">腾讯 PCG · AI产品创意大赛 · 赛题3（QQ社交）</div>
-  <h1>🎬 人生剧本</h1>
-  <div class="subtitle">LifeScript — AI生命体验伙伴</div>
-  <div class="tagline">一个在QQ里"活着"的AI好友<br>TA有自己的人生、会发动态、会主动找你聊天<br>你说的每一句话，都可能改变TA的人生</div>
+  <h1>💫 灵犀</h1>
+  <div class="subtitle">像真人一样陪伴你的 AI 好友<br>心有灵犀，一点就通</div>
   <div class="meta">
     产品说明文档<br>
-    版本：v12 · 2026年5月<br>
     Demo：https://lifescript-mu.vercel.app<br>
     GitHub：https://github.com/Stanley0601/lifescript
   </div>
 </div>
 
-<!-- 第一页：产品概述 -->
+<!-- 第一页：痛点与解法 -->
 <div class="page">
-  <h2>一、产品概述</h2>
-  
-  <h3>解决什么问题？</h3>
-  <p>当代年轻人面对人生重大选择（升学vs就业、创业vs稳定、兴趣vs现实）时，缺乏一个可以坦诚交流、没有社交压力的对象。现有AI助手要么过于工具化，要么缺乏情感深度。</p>
-  
-  <h3>我们的方案</h3>
-  <div class="highlight">
-    <p><strong>「人生剧本」</strong>是一个在QQ里"活着"的AI好友。TA有自己正在经历的人生困境——而你作为一个刚被加上的陌生人，你说的每一句话都在潜移默化中影响着TA的选择，最终改变TA的人生走向。</p>
+  <h2>一、解决什么痛点</h2>
+
+  <div class="pain-box">
+    <p><strong>痛点1：AI聊天 = 冰冷工具</strong></p>
+    <p>现有AI产品本质是"问答工具"——你问它答，用完即走。没有情感连接，没有延续性，不会主动找你。</p>
   </div>
-  
-  <h3>核心差异化</h3>
+
+  <div class="pain-box">
+    <p><strong>痛点2：社交压力无处释放</strong></p>
+    <p>年轻人想聊天但不想社交——跟朋友聊怕被评判，跟家人聊怕被说教。需要一个零压力的倾诉对象。</p>
+  </div>
+
+  <div class="pain-box">
+    <p><strong>痛点3：陪伴类产品"假"</strong></p>
+    <p>虚拟陪伴产品的共同问题：你始终能感觉到是AI——它太完美、太配合、太没有自己的生活。</p>
+  </div>
+
+  <h2 style="margin-top:30px;">二、我们的解法</h2>
+
+  <div class="solve-box">
+    <p><strong>灵犀 = 一个像真人一样活着的AI朋友</strong></p>
+    <p>不是助手，不是工具，是一个有自己生活、情绪和想法的人。TA会主动找你、记得你说过的话、心情会被你影响。</p>
+  </div>
+
   <table>
-    <tr><th>普通AI聊天</th><th>人生剧本</th></tr>
-    <tr><td>AI等你开口</td><td><strong>AI主动找你聊</strong>，基于你的兴趣破冰</td></tr>
-    <tr><td>AI没有自己的生活</td><td><strong>AI每天在过自己的日子</strong>，发动态、有心情</td></tr>
-    <tr><td>对话结束就结束了</td><td><strong>你的话会影响TA的人生走向</strong></td></tr>
-    <tr><td>AI是工具</td><td><strong>AI是一个你会牵挂的人</strong></td></tr>
-    <tr><td>千人一面</td><td><strong>基于你的兴趣个性化匹配话题</strong></td></tr>
+    <tr><th>维度</th><th>传统AI</th><th>灵犀</th></tr>
+    <tr><td>存在感</td><td>你不用就不存在</td><td><strong>有自己的日常，主动找你</strong></td></tr>
+    <tr><td>记忆</td><td>每次从零开始</td><td><strong>记得你说过的每一句话</strong></td></tr>
+    <tr><td>情绪</td><td>始终机械中立</td><td><strong>心情随对话实时变化</strong></td></tr>
+    <tr><td>节奏</td><td>你问就秒答</td><td><strong>像真人一样有时快有时慢</strong></td></tr>
+    <tr><td>内容</td><td>只能回答问题</td><td><strong>聊日常/新闻/球赛/发自拍</strong></td></tr>
+    <tr><td>形象</td><td>无</td><td><strong>有真实照片、发朋友圈</strong></td></tr>
   </table>
-  
-  <h3>赛道适配（QQ社交 · 赛题3）</h3>
-  <ul>
-    <li>QQ的核心是<strong>社交关系</strong> → 我们做的是一种全新的AI社交关系</li>
-    <li>赛题鼓励"让社交更有温度" → AI好友的温度来自TA的真实感和你对TA的影响力</li>
-    <li>赛题鼓励"无障碍交流" → AI好友没有社交压力，是最没有障碍的倾诉对象</li>
-  </ul>
 </div>
 
-<!-- 第二页：核心创新点 -->
+<!-- 第二页：核心创新 -->
 <div class="page">
-  <h2>二、核心创新点</h2>
-  
-  <h3>1. 兴趣感知的主动社交</h3>
-  <p>用户进入时选择兴趣标签（足球/动漫/音乐/游戏等10类），系统从<strong>40+热点话题池</strong>中匹配最合适的破冰内容。AI好友会主动发来和你兴趣相关的消息，而不是等你开口。</p>
-  
-  <h3>2. 关系递进系统</h3>
-  <p>对话过程中跟踪<strong>亲密度(familiarity)</strong>和<strong>默契度(chemistry)</strong>，关系会从"陌生→熟络→暧昧"递进。不同关系阶段下，角色的说话方式、动态内容、推荐理由都会变化。</p>
-  
-  <h3>3. 活人感设计（参考腾讯AIMate理论）</h3>
-  <ul>
-    <li><strong>日常生活系统</strong>：角色会发"去图书馆了""刚跑完步"等日常状态</li>
-    <li><strong>天气感知</strong>：对话中自然融入天气话题（"今天好热啊"）</li>
-    <li><strong>朋友圈动态</strong>：角色发动态和你兴趣强相关，你可以点赞评论</li>
-    <li><strong>情绪延续</strong>：角色的情绪会从上次对话延续到下次</li>
-  </ul>
-  
-  <h3>4. 旁观者叙事设计</h3>
-  <p>用户不是故事的主角，而是<strong>旁观者/倾听者</strong>。不需要做选择题，只需要自然聊天。你的态度（鼓励/中立/劝退）会被系统识别，最终影响角色的人生走向，产生<strong>9种不同结局</strong>。</p>
-  
-  <h3>5. 结局后的启发反思</h3>
-  <p>故事结束后展示完整的<strong>人生时间线</strong>、数值化的人生指标（幸福/成长/稳定/勇气/连接），以及"如果你说了不同的话"的平行结局对比，引发用户对自己人生选择的反思。</p>
+  <h2>三、核心创新点</h2>
+
+  <h3>1. 时间加速引擎（独创）</h3>
+  <p>故事时间:现实时间 = 10:1。AI不是随叫随到——TA会在"合适的时间"主动找你。刚认识时过几小时才回，熟了以后越来越快。这种<strong>不确定性</strong>正是让人持续打开的原因。</p>
+
+  <h3>2. 心情状态机</h3>
+  <p>AI的心情根据你说的话实时变化：鼓励→开心、否定→焦虑、安慰→放松。你对TA有<strong>真实的影响力</strong>，不是永远配合你的工具人。</p>
+
+  <h3>3. 对话记忆摘要</h3>
+  <p>退出聊天时自动生成记忆。下次TA会自然提起"上次你说的那个…"。这是真正的<strong>关系积累</strong>。</p>
+
+  <h3>4. 兴趣静默提取</h3>
+  <p>不需要填表。聊着聊着TA就"恰好"聊到你关心的话题——你感觉不到算法，只觉得TA<strong>懂你</strong>。</p>
+
+  <h3>5. 信息型陪伴</h3>
+  <p>不只是情感陪伴——TA还是消息灵通的朋友。能聊球赛、推荐电影、分享新闻。<strong>陪伴+信息获取一体化</strong>。</p>
+
+  <h3>6. 真实感系统</h3>
+  <p>AI会发表情包、发自拍、发朋友圈。有自己的日常状态（在图书馆/刚起床/深夜还在线）。所有这些构成一个<strong>完整的"活人"感知</strong>。</p>
 
   <div class="stats-grid">
     <div class="stat-card"><div class="num">3</div><div class="label">AI角色</div></div>
-    <div class="stat-card"><div class="num">9</div><div class="label">种结局</div></div>
-    <div class="stat-card"><div class="num">40+</div><div class="label">兴趣话题</div></div>
+    <div class="stat-card"><div class="num">6</div><div class="label">场景照片</div></div>
+    <div class="stat-card"><div class="num">6</div><div class="label">表情包</div></div>
   </div>
   <div class="stats-grid">
-    <div class="stat-card"><div class="num">10</div><div class="label">兴趣标签</div></div>
-    <div class="stat-card"><div class="num">5000+</div><div class="label">行代码</div></div>
-    <div class="stat-card"><div class="num">15+</div><div class="label">组件模块</div></div>
+    <div class="stat-card"><div class="num">5</div><div class="label">种心情状态</div></div>
+    <div class="stat-card"><div class="num">10x</div><div class="label">时间加速</div></div>
+    <div class="stat-card"><div class="num">∞</div><div class="label">对话不重复</div></div>
   </div>
 </div>
 
-<!-- 第三页：功能架构 -->
+<!-- 第三页：目标用户+体验流程 -->
 <div class="page">
-  <h2>三、功能架构</h2>
-  
-  <h3>产品功能全景</h3>
+  <h2>四、目标用户</h2>
+
+  <p><strong>核心用户：18-28岁年轻人</strong></p>
+  <ul>
+    <li><strong>大学生</strong>：社交需求强但精力有限，想要零压力的倾诉对象</li>
+    <li><strong>独居青年</strong>：下班后独处时间长，想有人陪着说说话</li>
+    <li><strong>社恐群体</strong>：现实社交焦虑但内心渴望连接</li>
+  </ul>
+
+  <p><strong>使用场景：</strong></p>
+  <ul>
+    <li>深夜失眠想找人聊天</li>
+    <li>午休无聊想摸鱼闲聊</li>
+    <li>刚看完一场球赛想跟人讨论</li>
+    <li>心情低落想倾诉但不想让朋友担心</li>
+  </ul>
+
+  <h2 style="margin-top:30px;">五、体验流程</h2>
+
   <table>
-    <tr><th>模块</th><th>功能</th><th>亮点</th></tr>
-    <tr><td>消息列表</td><td>QQ风格好友列表</td><td>实时在线状态、未读计数、主动消息预览</td></tr>
-    <tr><td>聊天界面</td><td>像素级QQ对话</td><td>打字动画、建议回复、兴趣话题自然融入</td></tr>
-    <tr><td>空间动态</td><td>QQ空间仿真</td><td>角色发动态、点赞评论互动、兴趣内容推荐</td></tr>
-    <tr><td>角色资料</td><td>个人主页</td><td>头像/签名/学校/年龄/关系状态</td></tr>
-    <tr><td>人生时间线</td><td>结局后解锁</td><td>5节点时间线、关键转折高亮</td></tr>
-    <tr><td>兴趣匹配</td><td>开局选标签</td><td>10类兴趣→40+话题池→个性化破冰</td></tr>
-    <tr><td>关系系统</td><td>亲密度递进</td><td>陌生→熟络→暧昧，影响对话风格</td></tr>
-    <tr><td>结局对比</td><td>平行人生展示</td><td>数值化指标+其他可能性</td></tr>
+    <tr><th>步骤</th><th>用户操作</th><th>系统反馈</th></tr>
+    <tr><td>1</td><td>打开灵犀</td><td>看到开屏 → 点击开始</td></tr>
+    <tr><td>2</td><td>选择一个灵犀伙伴</td><td>3个角色卡片展示</td></tr>
+    <tr><td>3</td><td>进入消息列表</td><td>角色主动发来消息（未读）</td></tr>
+    <tr><td>4</td><td>点击进入聊天</td><td>AI逐条发送消息（打字动画）</td></tr>
+    <tr><td>5</td><td>自由聊天</td><td>AI实时生成回复、发表情包</td></tr>
+    <tr><td>6</td><td>退出聊天</td><td>自动生成记忆摘要</td></tr>
+    <tr><td>7</td><td>过一段时间后</td><td>角色主动发来新消息</td></tr>
+    <tr><td>8</td><td>查看动态Tab</td><td>角色发布的朋友圈（真实配图）</td></tr>
   </table>
-  
-  <h3>体验流程</h3>
-  <div class="arch-box">
-    <code>开屏 → 选择角色人生 → 选择兴趣标签
-                              ↓
-              消息列表（QQ风格）← 看到AI好友的主动消息
-                              ↓
-              点击进入聊天 ← AI基于你的兴趣破冰
-                              ↓
-              自由聊天（打字 / 建议回复）
-                              ↓
-              AI根据你的态度推进剧情阶段（你不知道的）
-                              ↓
-              TA做出人生决定 → 时间跳跃 → 看到后续
-                              ↓
-              结局页 → 人生时间线 → "如果你说了不同的话"
-                              ↓
-              返回列表 → 动态更新 → 重新体验</code>
+
+  <h2 style="margin-top:30px;">六、赛道适配（QQ社交）</h2>
+  <div class="highlight">
+    <p>• QQ的核心是<strong>社交关系</strong> → 灵犀做的是一种全新的AI社交关系</p>
+    <p>• 赛题鼓励"让社交更有温度" → AI的温度来自TA的真实感和你对TA的影响力</p>
+    <p>• 赛题鼓励"无障碍交流" → AI好友没有社交压力，是最没有障碍的倾诉对象</p>
   </div>
-  
-  <h3>三个AI角色</h3>
-  <table>
-    <tr><th>角色</th><th>身份</th><th>核心困境</th></tr>
-    <tr><td>林小宇</td><td>CS大四 · 22岁</td><td>保研 vs AI创业公司Offer</td></tr>
-    <tr><td>陈浩然</td><td>金融研二 · 24岁</td><td>量化项目盈利了，退学创业 vs 完成学业</td></tr>
-    <tr><td>苏默默</td><td>设计大三 · 21岁</td><td>学了三年设计但爱上了编程，要不要换方向</td></tr>
-  </table>
 </div>
 
 <!-- 第四页：技术架构 -->
 <div class="page">
-  <h2>四、技术架构</h2>
-  
-  <h3>技术栈</h3>
-  <table>
-    <tr><th>层级</th><th>技术</th><th>理由</th></tr>
-    <tr><td>框架</td><td>Next.js 16 (App Router)</td><td>最新版 + SSR/SSG + API Routes</td></tr>
-    <tr><td>语言</td><td>TypeScript</td><td>类型安全、代码可维护</td></tr>
-    <tr><td>UI</td><td>Tailwind CSS + Framer Motion</td><td>原子CSS + 流畅动画</td></tr>
-    <tr><td>状态</td><td>React useState + localStorage</td><td>轻量持久化，无需后端数据库</td></tr>
-    <tr><td>AI</td><td>LLM API预留 + 本地剧情引擎</td><td>无Key也能完整体验</td></tr>
-    <tr><td>部署</td><td>Vercel</td><td>全球CDN + 自动HTTPS + 零配置</td></tr>
-  </table>
-  
-  <h3>项目结构</h3>
-  <div class="arch-box">
-    <code>src/
-├── app/
-│   ├── page.tsx              # 主入口（672行，状态管理中枢）
-│   └── api/chat/route.ts     # LLM API Route（预留+Fallback）
-├── components/               # 14个UI组件
-│   ├── Landing.tsx           # 开屏动画
-│   ├── StorySelect.tsx       # 角色选择
-│   ├── InterestSelect.tsx    # 兴趣标签选择
-│   ├── MessageListPage.tsx   # QQ消息列表
-│   ├── ChatView.tsx          # 聊天界面（293行）
-│   ├── MomentsFeed.tsx       # QQ空间动态
-│   ├── ProfilePage.tsx       # 角色资料页
-│   ├── TimelineView.tsx      # 人生时间线
-│   ├── EndingView.tsx        # 结局页
-│   └── ...
-├── lib/                      # 核心逻辑
-│   ├── chat-engine.ts        # 对话引擎（意图分类+阶段推进）
-│   ├── interest-context.ts   # 兴趣匹配系统（407行）
-│   ├── story-stages.ts       # 剧情阶段+结局数据
-│   ├── relationship-context  # 关系递进系统
-│   ├── daily-life.ts         # 日常生活模拟
-│   ├── weather-context.ts    # 天气感知
-│   ├── memory.ts             # 持久化（localStorage）
-│   └── mock-responses.ts     # Mock回复系统
-└── types/index.ts            # 全局类型（240行）</code>
-  </div>
-  
-  <h3>核心算法</h3>
-  <ul>
-    <li><strong>意图分类</strong>：关键词加权匹配（encourage/question/discourage/neutral）</li>
-    <li><strong>阶段推进</strong>：轮次计数 + 意图触发双重条件</li>
-    <li><strong>结局决定</strong>：全程意图历史加权投票</li>
-    <li><strong>兴趣匹配</strong>：用户标签 × 角色性格 → 话题池筛选 + 亲和度评分</li>
-    <li><strong>关系递进</strong>：基于对话轮次和互动行为的亲密度/默契度增长模型</li>
-  </ul>
-</div>
+  <h2>七、技术架构</h2>
 
-<!-- 第五页：演示 + 总结 -->
-<div class="page">
-  <h2>五、在线演示</h2>
-  
-  <div class="highlight">
-    <p><strong>🌐 线上 Demo：</strong>https://lifescript-mu.vercel.app</p>
-    <p><strong>📦 源代码：</strong>https://github.com/Stanley0601/lifescript</p>
-    <p>打开即用，无需登录。移动端/桌面端均可访问。</p>
-  </div>
-  
-  <h3>推荐体验路径（3-5分钟）</h3>
-  <ol>
-    <li>打开 Demo → 点击「进入QQ」</li>
-    <li>选择一个角色的人生（推荐林小宇，保研vs创业更贴近大学生）</li>
-    <li>选择你的兴趣标签（选2-3个）</li>
-    <li>进入消息列表 → 看到AI好友的主动消息 → 点击进入聊天</li>
-    <li>自由聊天 或 点击建议回复</li>
-    <li>体验完整结局 → 查看人生时间线</li>
-    <li>切换到「动态」Tab → 看角色的朋友圈</li>
-  </ol>
-  
-  <h2 style="margin-top: 40px;">六、未来展望</h2>
-  
-  <h3>短期（可立即接入）</h3>
+  <table>
+    <tr><th>层级</th><th>技术</th><th>说明</th></tr>
+    <tr><td>框架</td><td>Next.js 16 (App Router + Turbopack)</td><td>最新版全栈框架</td></tr>
+    <tr><td>语言</td><td>TypeScript</td><td>类型安全</td></tr>
+    <tr><td>AI</td><td>DeepSeek Chat API</td><td>实时对话生成</td></tr>
+    <tr><td>UI</td><td>Tailwind CSS + Framer Motion</td><td>原子CSS + 流畅动画</td></tr>
+    <tr><td>状态</td><td>React + localStorage</td><td>轻量持久化，无需后端</td></tr>
+    <tr><td>部署</td><td>Vercel Serverless</td><td>全球CDN，零运维</td></tr>
+  </table>
+
+  <h3>核心模块</h3>
+  <table>
+    <tr><th>模块</th><th>文件</th><th>功能</th></tr>
+    <tr><td>对话引擎</td><td>chat-engine.ts</td><td>意图分类、阶段推进、mock fallback</td></tr>
+    <tr><td>记忆系统</td><td>chat-summary.ts + memory.ts</td><td>对话摘要生成与注入</td></tr>
+    <tr><td>心情引擎</td><td>mood-engine.ts</td><td>5种心情状态实时切换</td></tr>
+    <tr><td>时间引擎</td><td>time-engine.ts</td><td>10倍加速 + 定时消息调度</td></tr>
+    <tr><td>兴趣系统</td><td>interest-context.ts</td><td>100+关键词静默提取</td></tr>
+    <tr><td>表情包</td><td>stickers.ts</td><td>6种情绪AI生成表情包</td></tr>
+    <tr><td>自拍系统</td><td>selfies.ts</td><td>多场景角色照片随机发送</td></tr>
+    <tr><td>Prompt工程</td><td>prompts.ts</td><td>动态注入记忆+心情+兴趣</td></tr>
+  </table>
+
+  <h2 style="margin-top:30px;">八、未来展望</h2>
   <ul>
-    <li>接入腾讯混元/DeepSeek LLM，实现真正的AI自由对话</li>
-    <li>接入QQ Bot SDK，成为真正的QQ好友（不只是模拟界面）</li>
-    <li>语音消息支持（AI角色发语音条）</li>
+    <li><strong>接入QQ Bot SDK</strong>：成为真正的QQ好友（不只是模拟界面）</li>
+    <li><strong>语音消息</strong>：AI角色发语音条（TTS接入）</li>
+    <li><strong>多角色联动</strong>：角色之间有关系、在动态里互动</li>
+    <li><strong>用户自定义角色</strong>：输入描述 → AI生成专属伙伴</li>
+    <li><strong>长期记忆进化</strong>：认识你越久，越懂你</li>
   </ul>
-  
-  <h3>中期</h3>
-  <ul>
-    <li>用户自定义角色：输入困境 → AI生成专属角色和剧情</li>
-    <li>多角色联动：角色之间在动态里互动</li>
-    <li>社交分享：结局卡片分享到QQ空间/朋友圈</li>
-  </ul>
-  
-  <h3>长期愿景</h3>
-  <ul>
-    <li>AI好友长期陪伴：不只是一段剧情，而是持续生长的关系</li>
-    <li>情感洞察报告：通过对话分析用户的价值观和决策风格</li>
-    <li>「人生剧本」社区：用户分享和交换彼此的AI好友故事</li>
-  </ul>
-  
+
   <div class="highlight" style="margin-top: 30px;">
-    <p style="text-align: center; font-size: 16px;"><strong>「人生剧本」——你说的每一句话，都可能改变TA的人生。</strong></p>
+    <p style="text-align: center; font-size: 16px;"><strong>灵犀——不是AI助手，是心有灵犀的朋友。</strong></p>
   </div>
 </div>
 

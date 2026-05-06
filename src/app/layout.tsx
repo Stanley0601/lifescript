@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "人生剧本 | LifeScript",
-  description: "AI生命体验伙伴——一个在QQ里活着的AI好友",
+  title: "灵犀 Linxi",
+  description: "像真人一样陪伴你的AI好友",
 };
 
 export default function RootLayout({

@@ -60,8 +60,8 @@ export default function StorySelect({ onSelect }: { onSelect: (characterId: stri
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">选择一个人生剧本</h1>
-          <p className="text-[15px] text-white/50 leading-relaxed">每个人都在人生的十字路口。你想旁观谁的故事？</p>
+          <h1 className="text-2xl font-bold text-white mb-2">选择你的灵犀伙伴</h1>
+          <p className="text-[15px] text-white/50 leading-relaxed">TA 们是真实存在的人，正在等一个可以聊天的朋友</p>
         </div>
 
         {/* Story Cards */}

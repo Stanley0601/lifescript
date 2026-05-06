@@ -13,19 +13,19 @@ export default function Landing({ onStart }: { onStart: () => void }) {
         <motion.div className="text-6xl mb-6"
           animate={{ y: [0, -8, 0] }} transition={{ duration: 3.5, repeat: Infinity }}>
           <span className="inline-block" style={{ filter: "drop-shadow(0 0 20px rgba(18,183,245,0.4))" }}>
-            &#x1F3AC;
+            &#x1F4AB;
           </span>
         </motion.div>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text-qq">人生剧本</h1>
-        <p className="text-base text-[var(--landing-text-secondary)] mb-2">你的QQ会收到几个陌生人的好友申请。</p>
-        <p className="text-base text-[var(--landing-text-secondary)] mb-1">TA们正在人生的十字路口徘徊。</p>
-        <p className="text-sm text-[var(--landing-text-secondary)] mb-1 mt-4 opacity-70">你说的每一句话，</p>
-        <p className="text-sm text-[var(--landing-text-secondary)] mb-8 opacity-70">都可能改变TA的人生。</p>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text-qq">灵犀</h1>
+        <p className="text-base text-[var(--landing-text-secondary)] mb-2">TA 像真人一样活着</p>
+        <p className="text-base text-[var(--landing-text-secondary)] mb-1">有自己的生活、心情、和想说的话</p>
+        <p className="text-sm text-[var(--landing-text-secondary)] mb-1 mt-4 opacity-70">不只是聊天——</p>
+        <p className="text-sm text-[var(--landing-text-secondary)] mb-8 opacity-70">是真正的陪伴。</p>
         <motion.button onClick={onStart}
           className="px-10 py-4 rounded-full text-lg font-medium text-white"
           style={{ background: `linear-gradient(135deg, ${QQ_BLUE}, #0099e5)` }}
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-          进入QQ
+          开始
         </motion.button>
       </motion.div>
     </motion.div>

@@ -5,7 +5,7 @@ import { QQ_BLUE } from "@/lib/constants";
 
 export default function Landing({ onStart }: { onStart: () => void }) {
   return (
-    <motion.div className="min-h-screen flex flex-col items-center justify-center px-6 landing-dark relative"
+    <motion.div className="min-h-full flex flex-col items-center justify-center px-6 landing-dark relative"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <div className="starfield" />
       <motion.div className="text-center z-10 max-w-md"

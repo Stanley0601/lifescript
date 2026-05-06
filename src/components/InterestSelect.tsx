@@ -41,7 +41,7 @@ export default function InterestSelect({
 
   return (
     <motion.div
-      className="min-h-screen px-5 py-10 safe-area-top"
+      className="min-h-full px-5 py-10 safe-area-top"
       style={{ background: "linear-gradient(180deg, #0a0a1a 0%, #111827 100%)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -92,7 +92,7 @@ export default function InterestSelect({
           </div>
 
           <div className="mb-5">
-            <p className="text-[12px] text-white/35 mb-3">你现在常住或最关心的城市</p>
+            <p className="text-[14px] text-white/35 mb-3">你现在常住或最关心的城市</p>
             <div className="flex flex-wrap gap-2.5">
               {CITY_OPTIONS.map(option => {
                 const active = city === option;
@@ -114,13 +114,13 @@ export default function InterestSelect({
             </div>
           </div>
 
-          <p className="text-[12px] text-white/35 mb-6">{hintText}</p>
+          <p className="text-[14px] text-white/35 mb-6">{hintText}</p>
 
           <div
             className="rounded-2xl px-4 py-4 mb-6"
             style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <p className="text-[12px] text-white/35 mb-2">你会看到的效果</p>
+            <p className="text-[14px] text-white/35 mb-2">你会看到的效果</p>
             <p className="text-[14px] text-white/70 leading-7">
               比如你选了“足球”和“科技”，她可能会突然说：
               <span className="text-white/95">“刚刚刷到曼城那场球，真的离谱…你也会看这种吗？”</span>

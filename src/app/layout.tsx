@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "人生剧本 | LifeScript",
-  description: "输入你的大学信息，AI为你生成一部专属互动短剧——在关键分叉点做不同选择，看见你的每一种平行人生",
+  description: "AI生命体验伙伴——一个在QQ里活着的AI好友",
 };
 
 export default function RootLayout({
@@ -24,10 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="phone-frame">
+          <div className="phone-screen">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ export default function TimelineView({ char, events, onBack }: {
   char: Character; events: TimelineEvent[]; onBack: () => void;
 }) {
   return (
-    <motion.div className="h-screen flex flex-col" style={{ background: QQ_BG }}
+    <motion.div className="h-full flex flex-col" style={{ background: QQ_BG }}
       initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
       transition={{ type: "tween", duration: 0.25 }}>
       {/* Header */}
@@ -45,7 +45,7 @@ export default function TimelineView({ char, events, onBack }: {
 
               {/* 内容 */}
               <div className={`flex-1 pb-2 ${event.isKeyMoment ? "" : ""}`}>
-                <span className="text-[12px] text-[#999]">{event.time}</span>
+                <span className="text-[14px] text-[#999]">{event.time}</span>
                 <h3 className={`text-[15px] font-medium mt-0.5 ${event.isKeyMoment ? "" : "text-[#333]"}`}
                   style={{ color: event.isKeyMoment ? QQ_BLUE : undefined }}>
                   {event.title}

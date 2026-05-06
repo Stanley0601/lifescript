@@ -38,7 +38,7 @@ export function getXiaoyuStages(): StoryStage[] {
         cm("char", "就我还在纠结😭"),
       ],
       suggestedReplies: ["怎么了？", "慢慢说", "在纠结什么"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
     {
       id: "xy-dilemma",
@@ -59,7 +59,7 @@ export function getXiaoyuStages(): StoryStage[] {
         cm("char", "你说我是不是在发神经🥲"),
       ],
       suggestedReplies: ["这机会很难得", "保研也很香", "你自己更想要哪个"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "xy-deep",
@@ -80,7 +80,7 @@ export function getXiaoyuStages(): StoryStage[] {
         cm("char", "为什么长大后每个选择都像在失去什么"),
       ],
       suggestedReplies: ["你不是在发神经", "后悔比失败更难受", "可以先想最坏结果"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "xy-decision",
@@ -96,7 +96,7 @@ export function getXiaoyuStages(): StoryStage[] {
         cm("char", "真的有被你影响到"),
       ],
       suggestedReplies: ["你做了什么决定？", "恭喜你想清楚了", "我很开心能帮到你"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
   ];
 }
@@ -125,7 +125,7 @@ export function getHaoranStages(): StoryStage[] {
         cm("char", "现在出现了一个很离谱的选择"),
       ],
       suggestedReplies: ["什么选择？", "你说", "我在"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
     {
       id: "hr-dilemma",
@@ -144,7 +144,7 @@ export function getHaoranStages(): StoryStage[] {
         cm("char", "我女朋友也觉得我疯了"),
       ],
       suggestedReplies: ["机会确实难得", "风险太大了", "你最看重什么"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "hr-deep",
@@ -163,7 +163,7 @@ export function getHaoranStages(): StoryStage[] {
         cm("char", "我现在最怕的是 我只是把野心误认成天赋"),
       ],
       suggestedReplies: ["先看最坏结果", "年轻时试错成本低", "你可以给自己设止损"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "hr-decision",
@@ -179,7 +179,7 @@ export function getHaoranStages(): StoryStage[] {
         cm("char", "谢谢你 凌晨陪我聊这么多"),
       ],
       suggestedReplies: ["我尊重你的决定", "祝你顺利", "有消息记得告诉我"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
   ];
 }
@@ -207,7 +207,7 @@ export function getMomoStages(): StoryStage[] {
         cm("char", "但最近越来越不确定 这是不是我真正想走的路"),
       ],
       suggestedReplies: ["怎么突然这么想？", "发生什么了", "你可以跟我说说"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
     {
       id: "mm-dilemma",
@@ -226,7 +226,7 @@ export function getMomoStages(): StoryStage[] {
         cm("char", "还是只是暂时逃避设计带来的挫败感"),
       ],
       suggestedReplies: ["喜欢就是线索", "先别急着否定过去", "你做了什么项目"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "mm-deep",
@@ -243,7 +243,7 @@ export function getMomoStages(): StoryStage[] {
         cm("char", "你会不会觉得 人长大之后最难的就是允许自己改变"),
       ],
       suggestedReplies: ["改变不等于否定过去", "你其实是在扩展自己", "可以走中间路线"],
-      turnsInStage: 2,
+      turnsInStage: 12,
     },
     {
       id: "mm-decision",
@@ -259,7 +259,7 @@ export function getMomoStages(): StoryStage[] {
         cm("char", "那种被理解的感觉 很少见"),
       ],
       suggestedReplies: ["你值得被理解", "我很高兴你想通了", "祝你走向想去的地方"],
-      turnsInStage: 1,
+      turnsInStage: 10,
     },
   ];
 }

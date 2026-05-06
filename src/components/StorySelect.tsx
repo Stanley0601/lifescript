@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import type { Character } from "@/types";
 import { characters } from "@/lib/characters";
 import { QQ_BLUE } from "@/lib/constants";
@@ -52,7 +51,7 @@ const storyCards: StoryCard[] = [
 
 export default function StorySelect({ onSelect }: { onSelect: (characterId: string) => void }) {
   return (
-    <motion.div className="min-h-screen px-5 py-10 safe-area-top"
+    <motion.div className="min-h-full px-5 py-10 safe-area-top"
       style={{ background: "linear-gradient(180deg, #0a0a1a 0%, #111827 100%)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 
@@ -87,13 +86,13 @@ export default function StorySelect({ onSelect }: { onSelect: (characterId: stri
                 {/* Top row: avatar + genre */}
                 <div className="flex items-center gap-3.5 mb-4">
                   <div className="w-[54px] h-[54px] rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-white/20">
-                    <Image src={card.character.avatarImg} alt={card.character.name}
-                      width={54} height={54} className="object-cover" />
+                    <img src={card.character.avatarImg} alt={card.character.name}
+                      width={54} height={54} className="object-cover w-full h-full" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[17px] font-semibold text-white">{card.character.name}</span>
-                      <span className="text-[12px] px-2.5 py-0.5 rounded-full text-white/70"
+                      <span className="text-[14px] px-2.5 py-0.5 rounded-full text-white/70"
                         style={{ background: "rgba(255,255,255,0.1)" }}>
                         {card.character.age}岁 · {card.character.school}
                       </span>
@@ -114,7 +113,7 @@ export default function StorySelect({ onSelect }: { onSelect: (characterId: stri
                 {/* Tags */}
                 <div className="flex items-center gap-2.5 flex-wrap mb-4">
                   {card.tags.map(tag => (
-                    <span key={tag} className="text-[12px] px-2.5 py-1 rounded-full"
+                    <span key={tag} className="text-[14px] px-2.5 py-1 rounded-full"
                       style={{ background: `${QQ_BLUE}20`, color: QQ_BLUE }}>
                       {tag}
                     </span>
@@ -124,8 +123,8 @@ export default function StorySelect({ onSelect }: { onSelect: (characterId: stri
                 {/* Bottom meta */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-white/30">⏱ {card.duration}</span>
-                    <span className="text-[11px] text-white/30">📊 {card.difficulty}</span>
+                    <span className="text-[13px] text-white/30">⏱ {card.duration}</span>
+                    <span className="text-[13px] text-white/30">📊 {card.difficulty}</span>
                   </div>
                   <motion.div
                     className="text-[13px] font-medium px-4 py-1.5 rounded-full"
@@ -141,7 +140,7 @@ export default function StorySelect({ onSelect }: { onSelect: (characterId: stri
         </div>
 
         {/* Footer */}
-        <motion.p className="text-center text-[12px] text-white/20 mt-6"
+        <motion.p className="text-center text-[14px] text-white/20 mt-6"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
           每个剧本都有多个结局 · 你的选择决定TA的人生
         </motion.p>

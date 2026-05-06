@@ -2,12 +2,51 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Character, ChatMsg, ProactiveInboxEntry, RelationshipState, UserProfile } from "@/types";
+import type { Character, ChatMsg, InterestTag, ProactiveInboxEntry, RelationshipState, UserProfile } from "@/types";
 import { getChatInterestSummary, initChatState, handleUserMessage, type ChatState } from "@/lib/chat-engine";
-import { saveChatHistory, loadChatHistory } from "@/lib/memory";
+import { saveChatHistory, loadChatHistory, saveChatSummary, loadChatSummary } from "@/lib/memory";
+import { generateChatSummary } from "@/lib/chat-summary";
 import { getWeatherCareLine } from "@/lib/weather-context";
 import { MsgBubble, TypingBubble } from "./ChatBubbles";
 import { QQ_BLUE } from "@/lib/constants";
+import { INTEREST_OPTIONS } from "@/lib/interest-context";
+import { getInitialMood, updateMood, type MoodState } from "@/lib/mood-engine";
+
+/** 从用户自由回复中静默提取兴趣标签 */
+function extractInterestsFromText(text: string): InterestTag[] {
+  const t = text.toLowerCase();
+  const keywordMap: Record<string, InterestTag> = {
+    // 足球
+    "足球": "足球", "踢球": "足球", "曼城": "足球", "曼联": "足球", "利物浦": "足球",
+    "梅西": "足球", "世界杯": "足球", "英超": "足球", "欧冠": "足球", "球赛": "足球",
+    // 篮球
+    "篮球": "篮球", "nba": "篮球", "打球": "篮球", "库里": "篮球", "詹姆斯": "篮球", "湖人": "篮球",
+    // 动漫
+    "动漫": "动漫", "番": "动漫", "二次元": "动漫", "漫画": "动漫", "动画": "动漫", "b站": "动漫", "cos": "动漫",
+    // 游戏
+    "游戏": "游戏", "打游戏": "游戏", "lol": "游戏", "王者": "游戏", "steam": "游戏",
+    "原神": "游戏", "switch": "游戏", "手游": "游戏", "端游": "游戏",
+    // 追星
+    "追星": "追星", "偶像": "追星", "演唱会": "追星", "爱豆": "追星", "粉丝": "追星",
+    // 科技
+    "科技": "科技", "ai": "科技", "编程": "科技", "代码": "科技", "tech": "科技",
+    "产品": "科技", "互联网": "科技", "创业": "科技", "开发": "科技",
+    // 新闻时事
+    "新闻": "新闻时事", "时事": "新闻时事", "热搜": "新闻时事",
+    // 音乐
+    "音乐": "音乐", "听歌": "音乐", "唱歌": "音乐", "乐队": "音乐", "rapper": "音乐", "嘻哈": "音乐",
+    // 电影
+    "电影": "电影", "看剧": "电影", "综艺": "电影", "美剧": "电影", "韩剧": "电影", "影院": "电影",
+    // 美食
+    "美食": "美食", "吃": "美食", "火锅": "美食", "奶茶": "美食", "做饭": "美食", "烧烤": "美食",
+  };
+
+  const found = new Set<InterestTag>();
+  Object.entries(keywordMap).forEach(([keyword, tag]) => {
+    if (t.includes(keyword)) found.add(tag);
+  });
+  return Array.from(found).filter(tag => INTEREST_OPTIONS.includes(tag));
+}
 
 type InitialChatSession = {
   state: ChatState;
@@ -56,7 +95,7 @@ function createInitialChatSession(
 
   const freshState = initChatState(charId, userProfile, relationship);
   const queue = proactiveEntry?.messages?.length
-    ? [...proactiveEntry.messages, ...freshState.pendingQueue]
+    ? [...freshState.pendingQueue, ...proactiveEntry.messages]
     : freshState.pendingQueue;
   const usedInterestTopicIds = proactiveEntry?.topicId
     ? [...freshState.usedInterestTopicIds, proactiveEntry.topicId]
@@ -76,13 +115,14 @@ function createInitialChatSession(
   };
 }
 
-export default function ChatView({ char, userProfile, relationship, proactiveEntry, onEnd, onBack }: {
+export default function ChatView({ char, userProfile, relationship, proactiveEntry, onEnd, onBack, onInterestConfirm }: {
   char: Character;
   userProfile: UserProfile | null;
   relationship: RelationshipState | null;
   proactiveEntry?: ProactiveInboxEntry | null;
   onEnd: (endingId: string, relationship: RelationshipState) => void;
   onBack: (relationship: RelationshipState) => void;
+  onInterestConfirm?: (tags: InterestTag[]) => void;
 }) {
   const initialSession = useMemo(
     () => createInitialChatSession(char.id, userProfile, relationship, proactiveEntry),
@@ -98,6 +138,7 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
   const [typing, setTyping] = useState(false);
   const [userTurn, setUserTurn] = useState(initialSession.userTurn);
   const [input, setInput] = useState("");
+  const [mood, setMood] = useState<MoodState>(() => getInitialMood(char.id));
   const [suggestions, setSuggestions] = useState<string[]>(initialSession.suggestions);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -172,29 +213,104 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
     return () => clearTimeout(timer);
   }, [queue, userTurn, state.isFinished, state.endingId, state.relationship, displayed.length, onEnd, scrollBottom]);
 
-  const handleSend = useCallback((text?: string) => {
+  const handleSend = useCallback(async (text?: string) => {
     const msgText = text || input.trim();
     if (!msgText || !userTurn) return;
 
     setUserTurn(false);
     setInput("");
 
+    // 静默从用户消息中提取兴趣标签
+    if (!userProfile?.interestTags?.length) {
+      const detected = extractInterestsFromText(msgText);
+      if (detected.length > 0) {
+        onInterestConfirm?.(detected);
+      }
+    }
+
+    // 更新心情状态
+    const newMood = updateMood(mood, msgText, state.turnsInCurrentStage);
+    setMood(newMood);
+
+    // 先显示用户消息
+    const userMsg: ChatMsg = { id: `u-${Date.now()}`, from: "user", type: "text", text: msgText, delay: 0, typing: 0 };
+    setDisplayed(prev => [...prev, userMsg]);
+    scrollBottom();
+
+    // 显示"对方正在输入"
+    setTyping(true);
+
+    // 尝试调用 LLM API
+    const currentStage = state.stages[state.currentStageIndex];
+    // 只传最近10条对话（节省token，摘要已覆盖更早的内容）
+    const history = displayed
+      .filter(m => m.type === "text" && (m.from === "char" || m.from === "user"))
+      .slice(-10)
+      .map(m => ({ role: m.from === "user" ? "user" as const : "assistant" as const, content: m.text }));
+
+    try {
+      const existingSummary = loadChatSummary(char.id);
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          characterId: char.id,
+          stageId: currentStage?.id || "",
+          history,
+          userMessage: msgText,
+          userProfile,
+          chatSummary: existingSummary,
+          mood: { current: newMood.current, intensity: newMood.intensity },
+        }),
+      });
+      const data = await res.json();
+
+      // 如果 API 返回了有效回复且不是错误提示
+      if (data.replies?.length && !data.replies[0]?.text?.startsWith("API错误") && !data.replies[0]?.text?.includes("本地剧情引擎")) {
+        setTyping(false);
+        const apiReplies: ChatMsg[] = data.replies.map((r: { text: string; delay: number }, i: number) => ({
+          id: `api-${Date.now()}-${i}`,
+          from: "char" as const,
+          type: "text" as const,
+          text: r.text,
+          delay: i === 0 ? 300 : 800 + i * 500,
+          typing: i === 0 ? 0 : 500 + Math.random() * 500,
+        }));
+
+        // 更新本地状态（阶段推进等）
+        const newState = handleUserMessage(state, msgText);
+        setState(newState);
+        // 用API回复替换mock回复
+        setQueue(apiReplies);
+        setSuggestions(data.suggestedReplies?.length ? data.suggestedReplies : newState.suggestedReplies);
+        return;
+      }
+    } catch {
+      // API失败，fallback到mock
+    }
+
+    // Fallback: 本地mock引擎
+    setTyping(false);
     const newState = handleUserMessage(state, msgText);
     setState(newState);
-    setQueue([
-      { id: `u-${Date.now()}`, from: "user", type: "text", text: msgText, delay: 0, typing: 0 },
-      ...newState.pendingQueue,
-    ]);
+    setQueue(newState.pendingQueue);
     setSuggestions(newState.suggestedReplies);
-  }, [input, userTurn, state]);
+  }, [input, userTurn, state, displayed, char.id, userProfile, onInterestConfirm, scrollBottom]);
 
   return (
-    <motion.div className="h-screen flex flex-col" style={{ background: "#f5f5f5" }}
+    <motion.div className="h-full flex flex-col" style={{ background: "#f5f5f5" }}
       initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
       transition={{ type: "tween", duration: 0.25 }}>
       <div className="flex-shrink-0 z-20 flex items-center px-4 py-3"
         style={{ background: "#ffffff", borderBottom: "0.5px solid #ebebeb" }}>
-        <button onClick={() => onBack(state.relationship)} className="mr-3 flex-shrink-0">
+        <button onClick={() => {
+          // 异步生成对话摘要（不阻塞返回）
+          const existingSummary = loadChatSummary(char.id);
+          generateChatSummary(char.id, char.name, displayed, existingSummary).then(summary => {
+            if (summary) saveChatSummary(char.id, summary);
+          });
+          onBack(state.relationship);
+        }} className="mr-3 flex-shrink-0">
           <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
             <path d="M9 1L1 9L9 17" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -202,13 +318,7 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
         <div className="flex-1 text-center min-w-0">
           <div className="text-[17px] font-semibold text-[#111]">{char.name}</div>
           {typing ? (
-            <div className="text-[12px] text-[#999] mt-0.5">对方正在输入...</div>
-          ) : state.relationship ? (
-            <div className="text-[11px] text-[#999] mt-0.5 truncate px-8">
-              {state.relationship.stage} · 熟悉度 {state.relationship.familiarity}% · 心动值 {state.relationship.chemistry}%
-            </div>
-          ) : interestSummary ? (
-            <div className="text-[11px] text-[#999] mt-0.5 truncate px-8">{interestSummary}</div>
+            <div className="text-[14px] text-[#999] mt-0.5">对方正在输入...</div>
           ) : null}
         </div>
         <div className="w-6 h-6 flex items-center justify-center">
@@ -220,27 +330,8 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
         </div>
       </div>
 
-      {interestSummary && displayed.length === 0 && (
-        <div className="px-4 pt-3">
-          <div className="max-w-lg mx-auto rounded-2xl px-4 py-3 text-[12px] leading-6"
-            style={{ background: `${QQ_BLUE}10`, color: "#5f6b7a" }}>
-            已根据你的兴趣标签做了轻量注入：角色可能会在合适的时候，像真的刷到今天的话题一样自然提起。
-          </div>
-        </div>
-      )}
-
-      {displayed.length === 0 && (
-        <div className="px-4 pt-3">
-          <div className="max-w-lg mx-auto rounded-2xl px-4 py-3 text-[12px] leading-6 bg-white text-[#6b7280] border border-[#edf1f5]">
-            <div className="font-medium text-[#4b5563] mb-1">关系状态：{state.relationship.stage}</div>
-            <div>现在的语气会随着熟悉度慢慢变化，前期更克制，后面会越来越自然，甚至带一点暧昧。</div>
-            <div className="mt-1 text-[#8b98a8]">{weatherCare}</div>
-          </div>
-        </div>
-      )}
-
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-5" style={{ background: "#f5f5f5" }}>
-        <div className="max-w-lg mx-auto space-y-4">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3" style={{ background: "#f5f5f5" }}>
+        <div className="max-w-lg mx-auto space-y-5">
           {displayed.map(msg => <MsgBubble key={msg.id} msg={msg} charImg={char.avatarImg} charName={char.name} />)}
           {typing && <TypingBubble charImg={char.avatarImg} charName={char.name} />}
         </div>
@@ -261,7 +352,7 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
         )}
       </AnimatePresence>
 
-      <div className="flex-shrink-0 z-20 px-4 py-3 safe-area-bottom" style={{ background: "#ffffff", borderTop: "0.5px solid #ebebeb" }}>
+      <div className="flex-shrink-0 z-20 px-4 pt-3 pb-8 safe-area-bottom" style={{ background: "#ffffff", borderTop: "0.5px solid #ebebeb" }}>
         {userTurn ? (
           <motion.div className="flex gap-2.5 items-end max-w-lg mx-auto"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -269,8 +360,8 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
               <input ref={inputRef} type="text" value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleSend()}
-                className="w-full px-4 py-2.5 rounded-full text-[16px] border outline-none focus:border-[#ccc]"
-                style={{ lineHeight: "1.5", background: "#f2f3f5", borderColor: "#f2f3f5" }}
+                className="w-full px-4 py-2.5 rounded-full text-[15px] border outline-none focus:border-[#ccc] focus:ring-2 focus:ring-[#12b7f5]/20"
+                style={{ lineHeight: "1.5", background: "#f2f3f5", borderColor: "#e8e8e8" }}
                 placeholder="说点什么..."
                 autoFocus />
             </div>
@@ -282,9 +373,14 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
             </button>
           </motion.div>
         ) : (
-          <div className="flex gap-2.5 items-end max-w-lg mx-auto">
-            <div className="flex-1 px-4 py-2.5 rounded-full text-[16px] text-[#bbb]" style={{ lineHeight: "1.5", background: "#f2f3f5" }}>
-              &nbsp;
+          <div className="flex gap-2.5 items-center max-w-lg mx-auto">
+            <div className="flex-1 px-4 py-2.5 rounded-full text-[14px] text-[#999] flex items-center gap-2" style={{ background: "#f2f3f5" }}>
+              <span className="flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#bbb] animate-bounce" style={{ animationDelay: "300ms" }} />
+              </span>
+              <span>对方正在输入</span>
             </div>
           </div>
         )}

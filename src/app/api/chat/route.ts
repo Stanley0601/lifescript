@@ -3,6 +3,7 @@ import type { ChatApiRequest, ChatApiResponse } from "@/types";
 import { getCharacter } from "@/lib/characters";
 import { buildSystemPrompt } from "@/lib/prompts";
 import { getStagesForCharacter } from "@/lib/story-stages";
+import { buildMoodPromptBlock } from "@/lib/mood-engine";
 
 /**
  * POST /api/chat
@@ -49,12 +50,23 @@ async function callLLM(body: ChatApiRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid character or stage" }, { status: 400 });
   }
 
-  const systemPrompt = buildSystemPrompt(
+  let systemPrompt = buildSystemPrompt(
     character,
     stage,
     body.userProfile || null,
     body.realtimeTopics,
+    body.chatSummary || null,
   );
+
+  // 注入心情状态
+  if (body.mood) {
+    const moodBlock = buildMoodPromptBlock({
+      current: body.mood.current as "excited" | "happy" | "calm" | "anxious" | "down",
+      intensity: body.mood.intensity,
+      history: [],
+    });
+    systemPrompt = systemPrompt + "\n\n" + moodBlock;
+  }
 
   const response = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
@@ -75,11 +87,48 @@ async function callLLM(body: ChatApiRequest): Promise<NextResponse> {
   });
 
   const data = await response.json();
+  console.log("[LLM Response]", JSON.stringify(data).slice(0, 500));
+
+  if (!response.ok) {
+    console.error("[LLM Error]", data);
+    return NextResponse.json({
+      replies: [{ text: `API错误: ${data.error?.message || response.status}`, delay: 500 }],
+      emotion: "neutral",
+      shouldAdvanceStage: false,
+      nextStageId: null,
+      suggestedReplies: [],
+    });
+  }
+
   const content: string = data.choices?.[0]?.message?.content || "嗯嗯";
 
   const shouldAdvance = content.includes("[NEXT]");
   const cleanContent = content.replace("[NEXT]", "").trim();
-  const parts = cleanContent.split("|").map((s: string) => s.trim()).filter(Boolean);
+  
+  // 分割消息：优先用 | 分割，fallback 用换行
+  let parts: string[];
+  if (cleanContent.includes("|")) {
+    parts = cleanContent.split("|").map((s: string) => s.trim()).filter(Boolean);
+  } else if (cleanContent.includes("\n")) {
+    parts = cleanContent.split("\n").map((s: string) => s.trim()).filter(Boolean);
+  } else if (cleanContent.length > 20) {
+    // 模型没遵循分割规则，强制按标点拆
+    const segments = cleanContent.split(/(?<=[，。！？\s])/);
+    parts = [];
+    let buf = "";
+    for (const seg of segments) {
+      if ((buf + seg).length > 18 && buf.length > 0) {
+        parts.push(buf.trim());
+        buf = seg;
+      } else {
+        buf += seg;
+      }
+    }
+    if (buf.trim()) parts.push(buf.trim());
+    if (parts.length === 0) parts = [cleanContent];
+  } else {
+    parts = [cleanContent];
+  }
 
   return NextResponse.json({
     replies: parts.map((text: string, i: number) => ({

@@ -61,6 +61,8 @@ export interface UserProfile {
   likedTopicTags?: InterestTag[];
   likedCharacterIds?: string[];
   city?: string;
+  nickname?: string;
+  avatar?: string;
 }
 
 export type FamiliarityStage = "陌生" | "熟络" | "暧昧";
@@ -120,6 +122,8 @@ export interface ChatApiRequest {
   userMessage: string;
   userProfile?: UserProfile | null;
   realtimeTopics?: InterestTopic[];
+  chatSummary?: { summary: string; keyTopics: string[]; userAttitude: string } | null;
+  mood?: { current: string; intensity: number } | null;
 }
 
 export interface ChatApiResponse {
@@ -157,7 +161,8 @@ export interface MomentPost {
   stageId: string;           // 关联的剧情阶段
   text: string;
   imageDesc?: string;        // 配图描述（AI角色"拍的照片"）
-  imageEmoji?: string;       // 配图用emoji代替（demo阶段）
+  imageEmoji?: string;       // 配图用emoji代替（fallback）
+  imageUrl?: string;         // AI生成的真实配图路径
   time: string;              // 显示时间 "3小时前" / "昨天 22:15"
   likes: number;
   likedByUser: boolean;

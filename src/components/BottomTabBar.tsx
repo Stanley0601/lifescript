@@ -17,7 +17,7 @@ export default function BottomTabBar({ current, onChange, unreadTotal }: {
   const inactiveColor = "#8A8A8A";
 
   return (
-    <div className="flex-shrink-0 safe-area-bottom"
+    <div className="flex-shrink-0 safe-area-bottom pb-4"
       style={{ background: "#ffffff", borderTop: "0.5px solid #E8E8E8" }}>
       <div className="flex items-center justify-around" style={{ height: 50 }}>
         {tabs.map(t => {
@@ -81,7 +81,7 @@ export default function BottomTabBar({ current, onChange, unreadTotal }: {
               </div>
 
               {/* 文字 */}
-              <span className="text-[10px] leading-none"
+              <span className="text-[13px] leading-none"
                 style={{ color: isActive ? activeColor : inactiveColor }}>
                 {t.label}
               </span>

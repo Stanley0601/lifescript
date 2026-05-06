@@ -173,3 +173,43 @@ export function clearAllData(): void {
   const keys = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_KEY_PREFIX));
   keys.forEach(k => localStorage.removeItem(k));
 }
+
+// ============================================
+// 定时消息调度（时间加速引擎）
+// ============================================
+
+import type { ScheduledMessage } from "./time-engine";
+
+export function saveScheduledMessages(messages: ScheduledMessage[]): void {
+  setItem("scheduled_messages", messages);
+}
+
+export function loadScheduledMessages(): ScheduledMessage[] {
+  return getItem<ScheduledMessage[]>("scheduled_messages", []);
+}
+
+export function markMessageTriggered(messageId: string): void {
+  const all = loadScheduledMessages();
+  const updated = all.map(m => m.id === messageId ? { ...m, triggered: true } : m);
+  saveScheduledMessages(updated);
+}
+
+// ============================================
+// 对话记忆摘要
+// ============================================
+
+export interface ChatSummary {
+  characterId: string;
+  summary: string;       // LLM生成的对话摘要
+  keyTopics: string[];   // 聊过的关键话题
+  userAttitude: string;  // 用户的态度倾向
+  lastUpdated: number;
+}
+
+export function saveChatSummary(characterId: string, summary: ChatSummary): void {
+  setItem(`chat_summary_${characterId}`, summary);
+}
+
+export function loadChatSummary(characterId: string): ChatSummary | null {
+  return getItem<ChatSummary | null>(`chat_summary_${characterId}`, null);
+}

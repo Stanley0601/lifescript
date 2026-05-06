@@ -1,0 +1,97 @@
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index 42896b8..deb7228 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -1,6 +1,6 @@
+ "use client";
+ 
+-import { useState, useCallback, useMemo, useEffect } from "react";
++import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+ import { AnimatePresence, motion } from "framer-motion";
+ import type { CharacterStatus, MomentComment, MomentPost, ProactiveInboxState, RelationshipState, TabType, UserProfile } from "@/types";
+ import { characters, getCharacter } from "@/lib/characters";
+@@ -195,12 +195,19 @@ export default function Home() {
+     if (userProfile) saveUserProfile(userProfile);
+   }, [userProfile]);
+ 
++  const lastViewedMomentsRef = useRef<number | undefined>(
++    typeof window !== "undefined" ? loadUserSignals()?.lastViewedMomentsAt : undefined,
++  );
++
+   useEffect(() => {
+     if (!userProfile) return;
++    if (tab === "moments") {
++      lastViewedMomentsRef.current = Date.now();
++    }
+     saveUserSignals({
+       likedCharacterIds: userProfile.likedCharacterIds || [],
+       likedTopicTags: userProfile.likedTopicTags || [],
+-      lastViewedMomentsAt: tab === "moments" ? Date.now() : loadUserSignals()?.lastViewedMomentsAt,
++      lastViewedMomentsAt: lastViewedMomentsRef.current,
+     });
+   }, [userProfile, tab]);
+ 
+@@ -266,7 +273,8 @@ export default function Home() {
+       extraMoments.push(...derivedDailyPosts);
+ 
+       if (userProfile?.interestTags?.length && prog.stageProgress <= 1) {
+-        const currentStoryStageId = getStagesForCharacter(charId)[Math.min(prog.stageProgress, getStagesForCharacter(charId).length - 1)]?.id;
++        const charStages = getStagesForCharacter(charId);
++        const currentStoryStageId = charStages[Math.min(prog.stageProgress, charStages.length - 1)]?.id;
+         if (currentStoryStageId) {
+           const interestPosts = buildInterestMomentPosts(charId, currentStoryStageId, userProfile)
+             .filter(post => !existingIds.has(post.id));
+@@ -341,7 +349,9 @@ export default function Home() {
+       if ((b.affinityScore || 0) !== (a.affinityScore || 0)) return (b.affinityScore || 0) - (a.affinityScore || 0);
+       return (b.lastMessageTime || "").localeCompare(a.lastMessageTime || "");
+     });
+-  }, [charProgress, selectedStoryId, liveStatuses, proactiveInbox, userProfile, relationships]);
++    // chatKey is intentionally included to force recompute after navigating back from chat
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, [charProgress, selectedStoryId, liveStatuses, proactiveInbox, userProfile, relationships, chatKey]);
+ 
+   const unreadTotal = charStatuses.reduce((sum, s) => sum + s.unreadCount, 0);
+ 
+diff --git a/src/components/ChatView.tsx b/src/components/ChatView.tsx
+index d0be09b..e05effb 100644
+--- a/src/components/ChatView.tsx
++++ b/src/components/ChatView.tsx
+@@ -86,7 +86,10 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
+ }) {
+   const initialSession = useMemo(
+     () => createInitialChatSession(char.id, userProfile, relationship, proactiveEntry),
+-    [char.id, userProfile, relationship, proactiveEntry],
++    // ChatView is keyed by `chat-${char.id}-${chatKey}`, so the component
++    // remounts on character change. Only char.id is needed here.
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++    [char.id],
+   );
+ 
+   const [state, setState] = useState<ChatState>(initialSession.state);
+diff --git a/src/lib/chat-engine.ts b/src/lib/chat-engine.ts
+index d59d6cc..efea8dc 100644
+--- a/src/lib/chat-engine.ts
++++ b/src/lib/chat-engine.ts
+@@ -40,7 +40,8 @@ function shouldInjectInterestTopic(state: ChatState): boolean {
+   const tags = state.userProfile?.interestTags || [];
+   if (tags.length === 0) return false;
+   if (state.currentStageIndex > 1) return false;
+-  return state.turnsInCurrentStage >= 0;
++  // Only inject after at least 1 turn of conversation so it feels natural
++  return state.turnsInCurrentStage >= 1;
+ }
+ 
+ function buildInterestInjectedMessages(state: ChatState): { messages: ChatMsg[]; topicId: string | null } {
+diff --git a/src/lib/mock-responses.ts b/src/lib/mock-responses.ts
+index e0ff676..78bb378 100644
+--- a/src/lib/mock-responses.ts
++++ b/src/lib/mock-responses.ts
+@@ -183,7 +183,7 @@ export function getMockResponse(
+   return {
+     replies,
+     emotion: intent,
+-    shouldAdvanceStage: data.advance || stageIndex >= totalStages - 1,
++    shouldAdvanceStage: data.advance,
+     nextStageId: null,
+     suggestedReplies:
+       intent === "encourage"

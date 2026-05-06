@@ -86,7 +86,10 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
 }) {
   const initialSession = useMemo(
     () => createInitialChatSession(char.id, userProfile, relationship, proactiveEntry),
-    [char.id, userProfile, relationship, proactiveEntry],
+    // ChatView is keyed by `chat-${char.id}-${chatKey}`, so the component
+    // remounts on character change. Only char.id is needed here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [char.id],
   );
 
   const [state, setState] = useState<ChatState>(initialSession.state);

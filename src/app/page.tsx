@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CharacterStatus, MomentComment, MomentPost, ProactiveInboxState, RelationshipState, TabType, UserProfile } from "@/types";
 import { characters, getCharacter } from "@/lib/characters";
@@ -195,12 +195,19 @@ export default function Home() {
     if (userProfile) saveUserProfile(userProfile);
   }, [userProfile]);
 
+  const lastViewedMomentsRef = useRef<number | undefined>(
+    typeof window !== "undefined" ? loadUserSignals()?.lastViewedMomentsAt : undefined,
+  );
+
   useEffect(() => {
     if (!userProfile) return;
+    if (tab === "moments") {
+      lastViewedMomentsRef.current = Date.now();
+    }
     saveUserSignals({
       likedCharacterIds: userProfile.likedCharacterIds || [],
       likedTopicTags: userProfile.likedTopicTags || [],
-      lastViewedMomentsAt: tab === "moments" ? Date.now() : loadUserSignals()?.lastViewedMomentsAt,
+      lastViewedMomentsAt: lastViewedMomentsRef.current,
     });
   }, [userProfile, tab]);
 
@@ -266,7 +273,8 @@ export default function Home() {
       extraMoments.push(...derivedDailyPosts);
 
       if (userProfile?.interestTags?.length && prog.stageProgress <= 1) {
-        const currentStoryStageId = getStagesForCharacter(charId)[Math.min(prog.stageProgress, getStagesForCharacter(charId).length - 1)]?.id;
+        const charStages = getStagesForCharacter(charId);
+        const currentStoryStageId = charStages[Math.min(prog.stageProgress, charStages.length - 1)]?.id;
         if (currentStoryStageId) {
           const interestPosts = buildInterestMomentPosts(charId, currentStoryStageId, userProfile)
             .filter(post => !existingIds.has(post.id));
@@ -341,7 +349,9 @@ export default function Home() {
       if ((b.affinityScore || 0) !== (a.affinityScore || 0)) return (b.affinityScore || 0) - (a.affinityScore || 0);
       return (b.lastMessageTime || "").localeCompare(a.lastMessageTime || "");
     });
-  }, [charProgress, selectedStoryId, liveStatuses, proactiveInbox, userProfile, relationships]);
+    // chatKey is intentionally included to force recompute after navigating back from chat
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [charProgress, selectedStoryId, liveStatuses, proactiveInbox, userProfile, relationships, chatKey]);
 
   const unreadTotal = charStatuses.reduce((sum, s) => sum + s.unreadCount, 0);
 

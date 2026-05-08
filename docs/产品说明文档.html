@@ -2,212 +2,358 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>灵犀 Linxi - 产品说明文档</title>
 <style>
-@page { size: A4; margin: 2cm; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+@page { size: A4; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body {
   font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  color: #1a1a1a;
-  line-height: 1.8;
-  font-size: 14px;
+  color: #2d3748;
+  line-height: 1.7;
+  font-size: 12.5px;
   background: white;
 }
-.page { page-break-after: always; padding: 40px 50px; min-height: 100vh; }
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 22mm 18mm 22mm;
+  page-break-after: always;
+  position: relative;
+}
 .page:last-child { page-break-after: avoid; }
+
+/* 封面 */
 .cover {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; min-height: 100vh;
-  background: linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%);
+  text-align: center; padding: 0;
+  background: linear-gradient(160deg, #0a1628 0%, #1a2744 40%, #0f2b4a 100%);
+  color: white;
 }
-.cover h1 { font-size: 48px; font-weight: 700; color: #12b7f5; margin-bottom: 8px; }
-.cover .subtitle { font-size: 18px; color: #555; margin-bottom: 40px; }
-.cover .meta { font-size: 13px; color: #999; line-height: 2.2; }
-.cover .badge { display: inline-block; padding: 6px 16px; border-radius: 20px; background: #12b7f5; color: white; font-size: 14px; font-weight: 500; margin-bottom: 30px; }
-h2 { font-size: 22px; font-weight: 700; color: #12b7f5; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #12b7f5; }
-h3 { font-size: 17px; font-weight: 600; color: #333; margin: 20px 0 10px; }
-p { margin-bottom: 12px; }
-ul, ol { margin: 8px 0 16px 20px; }
-li { margin-bottom: 6px; }
-table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
-th, td { padding: 10px 12px; border: 1px solid #e5e5e5; text-align: left; }
-th { background: #f0f9ff; color: #12b7f5; font-weight: 600; }
-.highlight { background: #f0f9ff; border-left: 4px solid #12b7f5; padding: 16px 20px; margin: 16px 0; border-radius: 0 8px 8px 0; }
-.highlight p { margin: 0; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
-.stat-card { background: #f8faff; border: 1px solid #e8f0fe; border-radius: 8px; padding: 16px; text-align: center; }
-.stat-card .num { font-size: 28px; font-weight: 700; color: #12b7f5; }
-.stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
-.pain-box { background: #fff5f5; border-left: 4px solid #ff6b6b; padding: 12px 16px; margin: 10px 0; border-radius: 0 8px 8px 0; }
-.solve-box { background: #f0fff4; border-left: 4px solid #10b981; padding: 12px 16px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+.cover .badge {
+  display: inline-block; padding: 8px 20px; border-radius: 24px;
+  background: rgba(18,183,245,0.15); border: 1px solid rgba(18,183,245,0.4);
+  color: #7dd3fc; font-size: 12px; font-weight: 500; letter-spacing: 1px; margin-bottom: 40px;
+}
+.cover h1 { font-size: 52px; font-weight: 800; color: #7dd3fc; margin-bottom: 10px; letter-spacing: 4px; }
+.cover .tagline { font-size: 18px; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
+.cover .slogan { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 60px; letter-spacing: 2px; }
+.cover .meta-box {
+  text-align: left; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 2.2;
+  border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px;
+}
+.cover .meta-box strong { color: rgba(255,255,255,0.4); font-weight: 400; margin-right: 8px; }
+
+/* 标题 */
+h2 {
+  font-size: 17px; font-weight: 700; color: #0c4a6e;
+  margin: 0 0 12px; padding-bottom: 6px; border-bottom: 2px solid #0ea5e9;
+}
+h3 {
+  font-size: 13px; font-weight: 700; color: #1e293b;
+  margin: 14px 0 6px; padding-left: 10px; border-left: 3px solid #0ea5e9;
+}
+
+/* 表格 */
+table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 11.5px; }
+th, td { border: 1px solid #e2e8f0; padding: 7px 10px; text-align: left; }
+th { background: #f1f5f9; color: #475569; font-weight: 600; font-size: 11px; }
+td { color: #374151; }
+
+/* 列表 */
+ul, ol { margin: 4px 0 10px 16px; font-size: 12px; }
+li { margin-bottom: 3px; }
+p { margin-bottom: 8px; font-size: 12px; }
+
+/* 痛点/解法卡片 */
+.pain-box { background: #fef2f2; border-left: 3px solid #ef4444; padding: 8px 12px; margin: 6px 0; border-radius: 0 6px 6px 0; font-size: 11.5px; }
+.solve-box { background: #f0fdf4; border-left: 3px solid #10b981; padding: 10px 14px; margin: 8px 0; border-radius: 0 6px 6px 0; }
+.info-box { background: #eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; margin: 8px 0; border-radius: 0 6px 6px 0; font-size: 11.5px; }
+
+/* 特性网格 */
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.feat-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px; }
+.feat-item .feat-title { font-weight: 700; font-size: 12px; color: #0c4a6e; margin-bottom: 3px; }
+.feat-item .feat-desc { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+/* 架构图 */
+.arch-layer {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px; padding: 8px 12px; border-radius: 6px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+}
+.arch-layer .lbl {
+  font-size: 10px; font-weight: 700; color: white;
+  padding: 2px 8px; border-radius: 3px; min-width: 48px; text-align: center;
+}
+.arch-layer .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.arch-layer .tags span { font-size: 10.5px; padding: 2px 6px; border-radius: 3px; background: white; border: 1px solid #e2e8f0; color: #475569; }
+.lbl-purple { background: #7c3aed; }
+.lbl-blue { background: #0ea5e9; }
+.lbl-amber { background: #d97706; }
+.lbl-green { background: #059669; }
+
+/* 流程 */
+.flow { font-size: 11.5px; color: #1e40af; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px 14px; margin: 8px 0; text-align: center; }
+
+/* 数据行 */
+.data-row { display: flex; gap: 12px; margin: 8px 0; }
+.data-item { flex: 1; text-align: center; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px 6px; }
+.data-item .num { font-size: 22px; font-weight: 800; color: #0284c7; }
+.data-item .lbl { font-size: 9.5px; color: #64748b; margin-top: 2px; }
+
+/* 结尾 */
+.ending { text-align: center; margin-top: 16px; padding: 16px; background: #0f172a; border-radius: 8px; }
+.ending p { font-size: 15px; font-weight: 700; color: white; letter-spacing: 1px; }
+
+.page-num { position: absolute; bottom: 14mm; right: 22mm; font-size: 9px; color: #94a3b8; }
+.small { font-size: 11px; color: #64748b; }
+.mt { margin-top: 14px; }
 </style>
 </head>
 <body>
 
-<!-- 封面 -->
+<!-- ====== 封面 ====== -->
 <div class="page cover">
-  <div class="badge">腾讯 PCG · AI产品创意大赛 · 赛题3（QQ社交）</div>
-  <h1>💫 灵犀</h1>
-  <div class="subtitle">像真人一样陪伴你的 AI 好友<br>心有灵犀，一点就通</div>
-  <div class="meta">
-    产品说明文档<br>
-    Demo：https://lifescript-mu.vercel.app<br>
-    GitHub：https://github.com/Stanley0601/lifescript
+  <div class="badge">腾讯 PCG · AI 产品创意大赛 · 赛题 3（QQ 社交）</div>
+  <h1>灵犀</h1>
+  <div class="tagline">像真人一样陪伴你的 AI 好友</div>
+  <div class="slogan">心有灵犀，一点就通</div>
+  <div class="meta-box">
+    <strong>选手</strong>尤逸伦<br>
+    <strong>赛道</strong>赛题3 · QQ社交赛道<br>
+    <strong>Demo</strong>https://linxi-d2gcj01lm1b6d05c8-1426415964.tcloudbaseapp.com<br>
+    <strong>GitHub</strong>https://github.com/Stanley0601/lifescript
   </div>
 </div>
 
-<!-- 第一页：痛点与解法 -->
+<!-- ====== 第1页：用户洞察与问题定义 ====== -->
 <div class="page">
-  <h2>一、解决什么痛点</h2>
+  <h2>模块一：用户洞察与问题定义</h2>
 
-  <div class="pain-box">
-    <p><strong>痛点1：AI聊天 = 冰冷工具</strong></p>
-    <p>现有AI产品本质是"问答工具"——你问它答，用完即走。没有情感连接，没有延续性，不会主动找你。</p>
-  </div>
+  <h3>目标用户画像</h3>
+  <p><strong>核心群体：18-28岁年轻人。</strong>具体画像如下：</p>
+  <table>
+    <tr><th>用户类型</th><th>特征</th><th>核心需求</th></tr>
+    <tr><td>大学生</td><td>社交需求强但精力有限，课余独处时间多</td><td>想要一个不会评判自己的倾诉对象</td></tr>
+    <tr><td>独居青年</td><td>下班后长时间独处，社交圈萎缩</td><td>想有人陪着说说话，不需要回应压力</td></tr>
+    <tr><td>社恐群体</td><td>现实社交焦虑，线上表达更自如</td><td>渴望连接但回避真人社交的负担</td></tr>
+  </table>
+  <p class="small">数据支撑：《中国青年报》2025调研显示73%独居青年报告孤独感；QQ月活5.5亿中18-28岁占比超60%；用户日均社交聊天2h+但62%认为现有AI缺乏情感连接。</p>
 
-  <div class="pain-box">
-    <p><strong>痛点2：社交压力无处释放</strong></p>
-    <p>年轻人想聊天但不想社交——跟朋友聊怕被评判，跟家人聊怕被说教。需要一个零压力的倾诉对象。</p>
-  </div>
+  <h3>用户痛点分析</h3>
+  <div class="pain-box"><strong>痛点1：AI聊天=冰冷工具。</strong>现有AI产品（Siri/ChatGPT/文心一言）本质是问答工具——你问它答，用完即走。没有情感连接和延续性，不会主动找你，也不记得你昨天说了什么。用户与AI之间不存在"关系"。</div>
+  <div class="pain-box"><strong>痛点2：社交压力无处释放。</strong>年轻人想聊天但不想社交——跟朋友怕被评判，跟家人怕被说教，跟同事怕暴露脆弱。需要一个零压力、零负担的倾诉对象，但现实中很难找到这样的人。</div>
+  <div class="pain-box"><strong>痛点3：陪伴类产品"假"。</strong>市面上虚拟陪伴产品（Character.AI/星野/筑梦岛）有一个共同问题：你始终感觉到这是AI——它太完美、太配合、太没有自己的生活。这种"假"让人无法产生真正的情感投入和留存。</div>
 
-  <div class="pain-box">
-    <p><strong>痛点3：陪伴类产品"假"</strong></p>
-    <p>虚拟陪伴产品的共同问题：你始终能感觉到是AI——它太完美、太配合、太没有自己的生活。</p>
-  </div>
+  <h3>使用场景</h3>
+  <table>
+    <tr><th>场景</th><th>用户心理状态</th><th>灵犀提供的价值</th><th>使用频率</th></tr>
+    <tr><td>深夜失眠</td><td>想找人聊天但不想打扰朋友</td><td>AI好友24h在线，记得上次话题自然延续</td><td>每周2-3次</td></tr>
+    <tr><td>午休摸鱼</td><td>无聊想闲聊打发时间</td><td>AI主动发消息，聊新闻/八卦/日常</td><td>每天</td></tr>
+    <tr><td>心情低落</td><td>想倾诉但不想让朋友担心</td><td>零压力倾诉，角色心情随你变化给予回应</td><td>每周1-2次</td></tr>
+    <tr><td>看完球赛/电影</td><td>想讨论但朋友不感兴趣</td><td>基于兴趣提取精准匹配话题</td><td>事件驱动</td></tr>
+    <tr><td>通勤路上</td><td>碎片时间想有点消遣</td><td>查看角色朋友圈动态、点赞互动</td><td>每天</td></tr>
+  </table>
 
-  <h2 style="margin-top:30px;">二、我们的解法</h2>
-
+  <h3>核心解法：一句话定义</h3>
   <div class="solve-box">
-    <p><strong>灵犀 = 一个像真人一样活着的AI朋友</strong></p>
-    <p>不是助手，不是工具，是一个有自己生活、情绪和想法的人。TA会主动找你、记得你说过的话、心情会被你影响。</p>
+    <strong>灵犀 = 一个像真人一样活着的 AI 朋友。</strong><br>
+    不是助手，不是工具——是一个有自己生活、有情绪、有想法的人。TA会主动找你聊天、记得你说过的每句话、心情会被你的态度影响。你对TA有真实的影响力，而不是面对一个永远配合你的工具人。
   </div>
 
   <table>
-    <tr><th>维度</th><th>传统AI</th><th>灵犀</th></tr>
-    <tr><td>存在感</td><td>你不用就不存在</td><td><strong>有自己的日常，主动找你</strong></td></tr>
-    <tr><td>记忆</td><td>每次从零开始</td><td><strong>记得你说过的每一句话</strong></td></tr>
-    <tr><td>情绪</td><td>始终机械中立</td><td><strong>心情随对话实时变化</strong></td></tr>
-    <tr><td>节奏</td><td>你问就秒答</td><td><strong>像真人一样有时快有时慢</strong></td></tr>
-    <tr><td>内容</td><td>只能回答问题</td><td><strong>聊日常/新闻/球赛/发自拍</strong></td></tr>
-    <tr><td>形象</td><td>无</td><td><strong>有真实照片、发朋友圈</strong></td></tr>
+    <tr><th>维度</th><th>传统AI助手</th><th>灵犀</th></tr>
+    <tr><td>存在感</td><td>你不用就不存在</td><td>有自己的日常，会主动找你</td></tr>
+    <tr><td>记忆</td><td>每次对话从零开始</td><td>记得你说过的每一句话，下次自然延续</td></tr>
+    <tr><td>情绪</td><td>始终机械中立</td><td>心情随对话实时变化，影响回复风格</td></tr>
+    <tr><td>节奏</td><td>你问就秒答</td><td>像真人一样有时秒回有时过几小时才回</td></tr>
+    <tr><td>内容</td><td>只能回答问题</td><td>聊日常、分享新闻、推荐电影、发自拍</td></tr>
+    <tr><td>形象</td><td>无视觉形象</td><td>有真实感照片、发朋友圈、有表情包</td></tr>
   </table>
+
+  <span class="page-num">1</span>
 </div>
 
-<!-- 第二页：核心创新 -->
+<!-- ====== 第2页：产品方案设计 ====== -->
 <div class="page">
-  <h2>三、核心创新点</h2>
+  <h2>模块二：产品方案设计</h2>
 
-  <h3>1. 时间加速引擎（独创）</h3>
-  <p>故事时间:现实时间 = 10:1。AI不是随叫随到——TA会在"合适的时间"主动找你。刚认识时过几小时才回，熟了以后越来越快。这种<strong>不确定性</strong>正是让人持续打开的原因。</p>
+  <h3>产品概述</h3>
+  <p>灵犀是一个部署在QQ生态中的AI社交陪伴产品。用户选择一个AI角色后，角色会像真正的QQ好友一样主动给你发消息、跟你聊天、发朋友圈、记得你们聊过的一切。核心体验是"你打开QQ，发现有个朋友给你发了消息"——而这个朋友是AI。</p>
 
-  <h3>2. 心情状态机</h3>
-  <p>AI的心情根据你说的话实时变化：鼓励→开心、否定→焦虑、安慰→放松。你对TA有<strong>真实的影响力</strong>，不是永远配合你的工具人。</p>
-
-  <h3>3. 对话记忆摘要</h3>
-  <p>退出聊天时自动生成记忆。下次TA会自然提起"上次你说的那个…"。这是真正的<strong>关系积累</strong>。</p>
-
-  <h3>4. 兴趣静默提取</h3>
-  <p>不需要填表。聊着聊着TA就"恰好"聊到你关心的话题——你感觉不到算法，只觉得TA<strong>懂你</strong>。</p>
-
-  <h3>5. 信息型陪伴</h3>
-  <p>不只是情感陪伴——TA还是消息灵通的朋友。能聊球赛、推荐电影、分享新闻。<strong>陪伴+信息获取一体化</strong>。</p>
-
-  <h3>6. 真实感系统</h3>
-  <p>AI会发表情包、发自拍、发朋友圈。有自己的日常状态（在图书馆/刚起床/深夜还在线）。所有这些构成一个<strong>完整的"活人"感知</strong>。</p>
-
-  <div class="stats-grid">
-    <div class="stat-card"><div class="num">3</div><div class="label">AI角色</div></div>
-    <div class="stat-card"><div class="num">6</div><div class="label">场景照片</div></div>
-    <div class="stat-card"><div class="num">6</div><div class="label">表情包</div></div>
+  <h3>六大核心功能</h3>
+  <div class="feat-grid">
+    <div class="feat-item">
+      <div class="feat-title">1. 时间加速引擎（独创）</div>
+      <div class="feat-desc">故事时间:现实时间=10:1。AI不是随叫随到的工具——TA会在"合适的时间"主动找你。刚认识时几小时后才发消息，熟了以后越来越快。这种不确定性是让人持续打开App的核心机制。</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-title">2. 心情状态机</div>
+      <div class="feat-desc">AI有5种心情状态（开心/平静/兴奋/焦虑/低落），根据你说的话实时切换。你鼓励→TA变开心语气变轻快；你否定→TA变焦虑回复变短。你对TA有真实的影响力。</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-title">3. 对话记忆摘要</div>
+      <div class="feat-desc">每次退出聊天时，LLM自动生成记忆摘要（关键话题、用户态度、重要事件）。下次聊天时摘要注入System Prompt，角色自然提起"上次你说的那个…"——真正的关系积累。</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-title">4. 兴趣静默提取</div>
+      <div class="feat-desc">不需要填任何兴趣表格。系统从自然对话中静默识别100+关键词分类（游戏/音乐/体育/科技等），然后AI"恰好"聊到你关心的话题。用户感觉不到算法，只觉得TA懂你。</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-title">5. 信息型陪伴（差异化）</div>
+      <div class="feat-desc">不只是情感陪伴——TA还是一个消息灵通的朋友。能跟你聊球赛比分、推荐电影、分享今日新闻、讨论科技动态。陪伴+信息获取一体化，让用户有持续聊下去的内容驱动力。</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-title">6. 真实感系统</div>
+      <div class="feat-desc">AI会发表情包（6种情绪）、发自拍（多场景照片池）、发朋友圈（带真实配图）。有日常状态（在图书馆/刚起床/深夜还在线）。所有这些构成完整的"活人"感知。</div>
+    </div>
   </div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="num">5</div><div class="label">种心情状态</div></div>
-    <div class="stat-card"><div class="num">10x</div><div class="label">时间加速</div></div>
-    <div class="stat-card"><div class="num">∞</div><div class="label">对话不重复</div></div>
+
+  <h3>与竞品差异化对比</h3>
+  <table>
+    <tr><th>维度</th><th>ChatGPT/文心一言</th><th>Character.AI/星野</th><th>灵犀（本产品）</th></tr>
+    <tr><td>定位</td><td>通用问答工具</td><td>角色扮演聊天</td><td><strong>像真人一样的AI好友</strong></td></tr>
+    <tr><td>主动性</td><td>你不用就不存在</td><td>你不开口不说话</td><td><strong>主动找你聊天（时间引擎）</strong></td></tr>
+    <tr><td>记忆</td><td>无跨会话记忆</td><td>有限上下文窗口</td><td><strong>LLM摘要跨会话记忆</strong></td></tr>
+    <tr><td>情绪</td><td>始终中立</td><td>始终配合讨好</td><td><strong>5种心情实时变化</strong></td></tr>
+    <tr><td>形象感</td><td>无</td><td>虚拟二次元头像</td><td><strong>真实感照片+自拍+朋友圈</strong></td></tr>
+    <tr><td>信息价值</td><td>强但冰冷无温度</td><td>弱，纯角色扮演</td><td><strong>自然融入聊天（信息型陪伴）</strong></td></tr>
+    <tr><td>留存机制</td><td>无</td><td>靠用户主动打开</td><td><strong>主动消息+不确定性+记忆延续</strong></td></tr>
+  </table>
+
+  <h3>体验流程（关键路径）</h3>
+  <div class="flow">
+    打开灵犀 → 选择AI角色（3个角色各有故事） → 进入QQ风格消息列表 → 发现角色主动发来消息（未读红点） → 点击进入聊天 → AI逐条发送消息（打字动画） → 用户自由聊天 → AI实时回复+发表情包 → 退出时自动生成记忆 → 过一段时间后角色再次主动找你 → 查看角色朋友圈动态 → 点赞评论互动
   </div>
+
+  <h3>赛题3适配说明</h3>
+  <div class="info-box">
+    <strong>赛题要求：用AI玩转QQ养虾，解锁社交新玩法。</strong>灵犀的适配思路：<br>
+    • QQ的核心是<strong>社交关系</strong> → 灵犀做的是一种全新形态的AI社交关系，不是工具是朋友<br>
+    • 赛题鼓励"有温度的AI社交新生态" → AI的温度来自真实感（主动找你/记得你/心情被你影响）<br>
+    • 赛题鼓励"无障碍交流" → AI好友零社交压力，是最没有障碍的倾诉对象<br>
+    • 赛题鼓励"群聊出圈" → 灵犀可扩展为多角色联动（角色之间互动），形成AI社交圈
+  </div>
+
+  <span class="page-num">2</span>
 </div>
 
-<!-- 第三页：目标用户+体验流程 -->
+<!-- ====== 第3页：AI原生能力 ====== -->
 <div class="page">
-  <h2>四、目标用户</h2>
+  <h2>模块三：AI 原生能力说明</h2>
 
-  <p><strong>核心用户：18-28岁年轻人</strong></p>
-  <ul>
-    <li><strong>大学生</strong>：社交需求强但精力有限，想要零压力的倾诉对象</li>
-    <li><strong>独居青年</strong>：下班后独处时间长，想有人陪着说说话</li>
-    <li><strong>社恐群体</strong>：现实社交焦虑但内心渴望连接</li>
-  </ul>
-
-  <p><strong>使用场景：</strong></p>
-  <ul>
-    <li>深夜失眠想找人聊天</li>
-    <li>午休无聊想摸鱼闲聊</li>
-    <li>刚看完一场球赛想跟人讨论</li>
-    <li>心情低落想倾诉但不想让朋友担心</li>
-  </ul>
-
-  <h2 style="margin-top:30px;">五、体验流程</h2>
-
+  <h3>AI核心能力与产品映射</h3>
   <table>
-    <tr><th>步骤</th><th>用户操作</th><th>系统反馈</th></tr>
-    <tr><td>1</td><td>打开灵犀</td><td>看到开屏 → 点击开始</td></tr>
-    <tr><td>2</td><td>选择一个灵犀伙伴</td><td>3个角色卡片展示</td></tr>
-    <tr><td>3</td><td>进入消息列表</td><td>角色主动发来消息（未读）</td></tr>
-    <tr><td>4</td><td>点击进入聊天</td><td>AI逐条发送消息（打字动画）</td></tr>
-    <tr><td>5</td><td>自由聊天</td><td>AI实时生成回复、发表情包</td></tr>
-    <tr><td>6</td><td>退出聊天</td><td>自动生成记忆摘要</td></tr>
-    <tr><td>7</td><td>过一段时间后</td><td>角色主动发来新消息</td></tr>
-    <tr><td>8</td><td>查看动态Tab</td><td>角色发布的朋友圈（真实配图）</td></tr>
+    <tr><th>AI能力</th><th>在灵犀中的具体应用</th><th>技术实现</th><th>去掉AI后果</th></tr>
+    <tr><td>大模型实时对话</td><td>每一句回复都是AI基于角色设定+记忆+心情+兴趣实时生成</td><td>DeepSeek Chat API</td><td>产品完全无法运行</td></tr>
+    <tr><td>Prompt工程</td><td>动态组装System Prompt：注入角色性格+当前心情+历史记忆+用户兴趣</td><td>模板化Prompt+动态变量注入</td><td>角色变成死板脚本</td></tr>
+    <tr><td>对话摘要生成</td><td>退出时LLM提炼关键信息（话题/态度/事件）作为下次记忆</td><td>LLM Summarization</td><td>每次从零开始无积累</td></tr>
+    <tr><td>情绪分析</td><td>分析用户每句话的正负面倾向，实时更新角色心情状态</td><td>Prompt内置情绪判定规则</td><td>角色无情感反应</td></tr>
+    <tr><td>兴趣提取(NLP)</td><td>从用户发言中静默识别兴趣关键词（100+分类）</td><td>关键词匹配+语义理解</td><td>无法个性化话题</td></tr>
+    <tr><td>内容生成</td><td>生成朋友圈文案、日常状态文字、表情包触发判定</td><td>LLM + 规则引擎</td><td>动态内容不存在</td></tr>
   </table>
 
-  <h2 style="margin-top:30px;">六、赛道适配（QQ社交）</h2>
-  <div class="highlight">
-    <p>• QQ的核心是<strong>社交关系</strong> → 灵犀做的是一种全新的AI社交关系</p>
-    <p>• 赛题鼓励"让社交更有温度" → AI的温度来自TA的真实感和你对TA的影响力</p>
-    <p>• 赛题鼓励"无障碍交流" → AI好友没有社交压力，是最没有障碍的倾诉对象</p>
+  <h3>关键论证：AI原生性</h3>
+  <div class="info-box">
+    <strong>去掉AI，灵犀还能成立吗？完全不能。</strong><br><br>
+    灵犀的核心价值链——"实时对话生成→记忆摘要→情绪反馈→兴趣匹配→内容生成"——每一环都100%依赖AI能力。这不是一个"给现有产品加了AI功能"的方案，而是一个<strong>只有AI才能实现的全新社交范式</strong>。传统技术无法实现"每次对话不重复且有情感响应"的体验。
   </div>
+
+  <h3>技术架构（四层）</h3>
+  <div class="arch-layer">
+    <span class="lbl lbl-purple">前端层</span>
+    <div class="tags"><span>Next.js 16 (App Router)</span><span>TypeScript</span><span>Tailwind CSS</span><span>Framer Motion动画</span></div>
+  </div>
+  <div class="arch-layer">
+    <span class="lbl lbl-blue">AI层</span>
+    <div class="tags"><span>DeepSeek Chat API</span><span>动态Prompt组装</span><span>记忆摘要生成</span><span>情绪分析</span></div>
+  </div>
+  <div class="arch-layer">
+    <span class="lbl lbl-amber">引擎层</span>
+    <div class="tags"><span>心情状态机(5态)</span><span>时间加速器(10x)</span><span>兴趣提取器</span><span>主动消息调度</span><span>表情包引擎</span></div>
+  </div>
+  <div class="arch-layer">
+    <span class="lbl lbl-green">基础设施</span>
+    <div class="tags"><span>腾讯云CloudBase</span><span>静态托管</span><span>localStorage持久化</span><span>DeepSeek API</span></div>
+  </div>
+
+  <h3>核心模块清单（8个自研引擎）</h3>
+  <table>
+    <tr><th>模块</th><th>文件</th><th>核心职责</th><th>代码行数</th></tr>
+    <tr><td>对话引擎</td><td>chat-engine.ts</td><td>意图分类、对话阶段推进、API调用、fallback</td><td>~400行</td></tr>
+    <tr><td>记忆系统</td><td>chat-summary.ts</td><td>LLM对话摘要生成、关键信息提取、注入管理</td><td>~200行</td></tr>
+    <tr><td>心情引擎</td><td>mood-engine.ts</td><td>5种心情状态定义、切换规则、Prompt注入</td><td>~150行</td></tr>
+    <tr><td>时间引擎</td><td>time-engine.ts</td><td>10x加速、主动消息定时调度、关系阶段演进</td><td>~250行</td></tr>
+    <tr><td>兴趣系统</td><td>interest-context.ts</td><td>100+关键词匹配、兴趣向量构建、话题推荐</td><td>~180行</td></tr>
+    <tr><td>表情包引擎</td><td>stickers.ts</td><td>情绪→表情包映射、[STICKER]标记解析</td><td>~100行</td></tr>
+    <tr><td>自拍系统</td><td>selfies.ts</td><td>多场景照片池管理、触发条件判定</td><td>~80行</td></tr>
+    <tr><td>Prompt工程</td><td>prompts.ts</td><td>System Prompt模板、动态变量注入</td><td>~300行</td></tr>
+  </table>
+
+  <h3>AI工作流程（单轮对话）</h3>
+  <div class="flow">
+    用户输入消息 → 情绪分析（判定正/负/中性，更新角色心情状态） → 兴趣提取（静默识别关键词） → Prompt动态组装（角色设定 + 当前心情 + 历史记忆摘要 + 用户兴趣标签） → 调用DeepSeek API生成回复 → 后处理（分条拆分、表情包判定、自拍触发） → 逐条输出（打字动画效果）
+  </div>
+
+  <span class="page-num">3</span>
 </div>
 
-<!-- 第四页：技术架构 -->
+<!-- ====== 第4页：加分项 ====== -->
 <div class="page">
-  <h2>七、技术架构</h2>
+  <h2>模块四：落地可行性与商业化</h2>
 
-  <table>
-    <tr><th>层级</th><th>技术</th><th>说明</th></tr>
-    <tr><td>框架</td><td>Next.js 16 (App Router + Turbopack)</td><td>最新版全栈框架</td></tr>
-    <tr><td>语言</td><td>TypeScript</td><td>类型安全</td></tr>
-    <tr><td>AI</td><td>DeepSeek Chat API</td><td>实时对话生成</td></tr>
-    <tr><td>UI</td><td>Tailwind CSS + Framer Motion</td><td>原子CSS + 流畅动画</td></tr>
-    <tr><td>状态</td><td>React + localStorage</td><td>轻量持久化，无需后端</td></tr>
-    <tr><td>部署</td><td>Vercel Serverless</td><td>全球CDN，零运维</td></tr>
-  </table>
-
-  <h3>核心模块</h3>
-  <table>
-    <tr><th>模块</th><th>文件</th><th>功能</th></tr>
-    <tr><td>对话引擎</td><td>chat-engine.ts</td><td>意图分类、阶段推进、mock fallback</td></tr>
-    <tr><td>记忆系统</td><td>chat-summary.ts + memory.ts</td><td>对话摘要生成与注入</td></tr>
-    <tr><td>心情引擎</td><td>mood-engine.ts</td><td>5种心情状态实时切换</td></tr>
-    <tr><td>时间引擎</td><td>time-engine.ts</td><td>10倍加速 + 定时消息调度</td></tr>
-    <tr><td>兴趣系统</td><td>interest-context.ts</td><td>100+关键词静默提取</td></tr>
-    <tr><td>表情包</td><td>stickers.ts</td><td>6种情绪AI生成表情包</td></tr>
-    <tr><td>自拍系统</td><td>selfies.ts</td><td>多场景角色照片随机发送</td></tr>
-    <tr><td>Prompt工程</td><td>prompts.ts</td><td>动态注入记忆+心情+兴趣</td></tr>
-  </table>
-
-  <h2 style="margin-top:30px;">八、未来展望</h2>
-  <ul>
-    <li><strong>接入QQ Bot SDK</strong>：成为真正的QQ好友（不只是模拟界面）</li>
-    <li><strong>语音消息</strong>：AI角色发语音条（TTS接入）</li>
-    <li><strong>多角色联动</strong>：角色之间有关系、在动态里互动</li>
-    <li><strong>用户自定义角色</strong>：输入描述 → AI生成专属伙伴</li>
-    <li><strong>长期记忆进化</strong>：认识你越久，越懂你</li>
-  </ul>
-
-  <div class="highlight" style="margin-top: 30px;">
-    <p style="text-align: center; font-size: 16px;"><strong>灵犀——不是AI助手，是心有灵犀的朋友。</strong></p>
+  <h3>技术落地现状</h3>
+  <div class="data-row">
+    <div class="data-item"><div class="num">5000+</div><div class="lbl">TypeScript代码行</div></div>
+    <div class="data-item"><div class="num">8</div><div class="lbl">自研引擎模块</div></div>
+    <div class="data-item"><div class="num">3</div><div class="lbl">AI角色（完整设定）</div></div>
+    <div class="data-item"><div class="num">100%</div><div class="lbl">功能可在线体验</div></div>
   </div>
+  <table>
+    <tr><th>维度</th><th>当前状态</th></tr>
+    <tr><td>代码完成度</td><td>MVP已全部完成，核心流程（选角色→聊天→记忆→主动消息→动态）全部跑通</td></tr>
+    <tr><td>线上部署</td><td>已部署腾讯云CloudBase，Demo链接稳定可访问，无需注册即可体验</td></tr>
+    <tr><td>AI接入</td><td>DeepSeek Chat API已接入，实时对话延迟&lt;2秒，支持连续多轮</td></tr>
+    <tr><td>成本控制</td><td>DeepSeek API成本约为GPT-4的1/10，纯前端+Serverless零服务器成本</td></tr>
+  </table>
+
+  <h3>QQ生态集成路径</h3>
+  <table>
+    <tr><th>集成方式</th><th>说明</th><th>技术难度</th><th>时间预估</th></tr>
+    <tr><td>QQ Bot SDK</td><td>接入QQ官方Bot平台，角色变成真正的QQ好友，收发消息无需打开独立页面</td><td>中等</td><td>2-3周</td></tr>
+    <tr><td>QQ小程序</td><td>作为QQ小程序独立分发，保留完整UI体验，可被QQ内搜索发现</td><td>低</td><td>1周</td></tr>
+    <tr><td>QQ频道Bot</td><td>部署在QQ频道中，支持多人与AI角色互动的群聊场景</td><td>中等</td><td>2周</td></tr>
+  </table>
+
+  <h3>商业化模式</h3>
+  <table>
+    <tr><th>模式</th><th>具体方案</th><th>预期单价</th><th>行业参考</th></tr>
+    <tr><td>免费增值订阅</td><td>基础对话免费（每日20条）；Pro解锁无限对话+高级角色+自拍功能+无限记忆</td><td>19.9元/月</td><td>Character.AI Plus $9.9/月</td></tr>
+    <tr><td>虚拟礼物系统</td><td>给AI好友送礼物（花/奶茶/游戏装备），影响亲密度和角色解锁内容</td><td>1-50元/个</td><td>QQ空间礼物+QQ秀</td></tr>
+    <tr><td>IP联动角色</td><td>与腾讯视频热门IP合作推出影视角色AI版（如《庆余年》范闲）</td><td>限时免费/付费解锁</td><td>星野×IP联动</td></tr>
+    <tr><td>品牌合作</td><td>品牌角色入驻（如奶茶品牌AI虚拟店员），用户互动即获优惠券</td><td>B端收费</td><td>虚拟KOL模式</td></tr>
+  </table>
+
+  <h3>市场规模与竞争力</h3>
+  <div class="info-box">
+    <strong>市场规模：</strong>全球AI伴侣市场预计2027年达18亿美元（Grand View Research）。中国Z世代（18-28岁）约2.6亿人，社交App日均使用超2小时。QQ月活5.5亿，年轻用户占比超60%——灵犀的潜在用户池超3亿。<br><br>
+    <strong>竞争壁垒：</strong>①时间加速+心情状态机是独创机制，竞品均无；②记忆摘要系统带来真正的关系积累；③信息型陪伴定位差异化，不只是情感陪聊；④QQ原生社交场景适配（朋友圈/表情包/在线状态）。
+  </div>
+
+  <h3>未来路线图</h3>
+  <table>
+    <tr><th>阶段</th><th>时间</th><th>里程碑</th></tr>
+    <tr><td>Phase 1</td><td>当前</td><td>MVP上线，3个角色，核心流程跑通，Demo可体验</td></tr>
+    <tr><td>Phase 2</td><td>1-2个月</td><td>接入QQ Bot SDK；增加语音消息（TTS）；用户自定义角色</td></tr>
+    <tr><td>Phase 3</td><td>3-6个月</td><td>多角色联动（角色间互动）；长期记忆进化；IP角色引入</td></tr>
+    <tr><td>Phase 4</td><td>6-12个月</td><td>AI社交圈生态（多个角色形成关系网）；商业化变现</td></tr>
+  </table>
+
+  <div class="ending">
+    <p>灵犀 —— 不是 AI 助手，是心有灵犀的朋友。</p>
+  </div>
+
+  <span class="page-num">4</span>
 </div>
 
 </body>

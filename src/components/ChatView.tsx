@@ -11,6 +11,7 @@ import { MsgBubble, TypingBubble } from "./ChatBubbles";
 import { QQ_BLUE } from "@/lib/constants";
 import { INTEREST_OPTIONS } from "@/lib/interest-context";
 import { getInitialMood, updateMood, type MoodState } from "@/lib/mood-engine";
+import { callLLMDirect } from "@/lib/llm-client";
 
 /** 从用户自由回复中静默提取兴趣标签 */
 function extractInterestsFromText(text: string): InterestTag[] {
@@ -250,23 +251,17 @@ export default function ChatView({ char, userProfile, relationship, proactiveEnt
 
     try {
       const existingSummary = loadChatSummary(char.id);
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          characterId: char.id,
-          stageId: currentStage?.id || "",
-          history,
-          userMessage: msgText,
-          userProfile,
-          chatSummary: existingSummary,
-          mood: { current: newMood.current, intensity: newMood.intensity },
-        }),
+      const data = await callLLMDirect({
+        characterId: char.id,
+        stageId: currentStage?.id || "",
+        history,
+        userMessage: msgText,
+        userProfile,
+        chatSummary: existingSummary,
+        mood: newMood,
       });
-      const data = await res.json();
 
-      // 如果 API 返回了有效回复且不是错误提示
-      if (data.replies?.length && !data.replies[0]?.text?.startsWith("API错误") && !data.replies[0]?.text?.includes("本地剧情引擎")) {
+      if (data && data.replies?.length) {
         setTyping(false);
         const apiReplies: ChatMsg[] = data.replies.map((r: { text: string; delay: number }, i: number) => ({
           id: `api-${Date.now()}-${i}`,

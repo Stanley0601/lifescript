@@ -8,14 +8,14 @@ const path = require('path');
   });
   const page = await browser.newPage();
   
-  const htmlPath = path.resolve('/Users/stanleyyou/WorkBuddy/20260422103457/lifescript/docs/产品说明文档.html');
+  const htmlPath = path.resolve(__dirname, '产品说明文档.html');
   await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0', timeout: 30000 });
   
   await page.evaluateHandle('document.fonts.ready');
   await page.emulateMediaType('screen');
   
   await page.pdf({
-    path: '/Users/stanleyyou/WorkBuddy/20260422103457/lifescript/docs/尤逸伦_QQ社交赛道_灵犀_说明文档.pdf',
+    path: path.resolve(__dirname, '灵犀_说明文档.pdf'),
     format: 'A4',
     printBackground: true,
     margin: { top: '0', bottom: '0', left: '0', right: '0' },

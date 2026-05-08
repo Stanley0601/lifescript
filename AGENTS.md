@@ -5,14 +5,14 @@ This project uses **Next.js 16 + React 19**. APIs, conventions, and file structu
 Before making framework-level changes, read the relevant guide in `node_modules/next/dist/docs/` and heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# LifeScript AI Collaboration Guide
+# Linxi AI Collaboration Guide
 
 This file defines the non-negotiable rules for any AI agent or collaborator editing this repository.
 
 ## 1. Product North Star
 
-LifeScript is **not** a generic chatbot demo.
-It is an **AI life-experience companion** inside a QQ-like social product.
+Linxi (灵犀) is **not** a generic chatbot demo.
+It is an **AI social companion** — a friend that lives, feels, and reaches out to you.
 
 Every implementation decision should reinforce these ideas:
 - the AI character feels **alive**

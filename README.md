@@ -123,7 +123,7 @@ npm run dev
 在项目根目录创建 `.env.local`：
 
 ```bash
-DEEPSEEK_API_KEY=your_deepseek_api_key
+NEXT_PUBLIC_DEEPSEEK_KEY=your_deepseek_api_key
 ```
 
 不配置 API Key 时会使用内置 mock 回复，方便快速体验产品流程。

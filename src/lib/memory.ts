@@ -3,7 +3,7 @@
 
 import type { ChatMsg, InterestTag, MomentComment, ProactiveInboxState, RelationshipState, UserProfile } from "@/types";
 
-const STORAGE_KEY_PREFIX = "lifescript_";
+const STORAGE_KEY_PREFIX = "linxi_";
 
 // ============================================
 // 通用读写

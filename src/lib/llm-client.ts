@@ -9,7 +9,7 @@ import { getStagesForCharacter } from "./story-stages";
 import type { ChatApiResponse, UserProfile, InterestTopic } from "@/types";
 import type { ChatSummary } from "./memory";
 
-const API_KEY = "sk-379bfe5879e242a493487bdc4dc33fdf";
+const API_KEY = process.env.NEXT_PUBLIC_DEEPSEEK_KEY || "";
 const BASE_URL = "https://api.deepseek.com/v1";
 const MODEL = "deepseek-chat";
 

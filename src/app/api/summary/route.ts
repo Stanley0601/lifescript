@@ -22,6 +22,7 @@ ${transcript}
 - summary：一段话概括这次聊天的核心内容（50字以内）
 - keyTopics：聊了哪些话题（数组，3-5个关键词）
 - userAttitude：用户对${characterName}的态度倾向（"鼓励"/"中立"/"质疑"/"关心"中选一个）
+- myStatements：${characterName}自己说过的重要内容（数组，2-4条。用第一人称"我"记录，比如"我说了周末要去图书馆"、"我推荐了电影星际穿越"、"我提到最近在准备考试"。只记有实质内容的陈述，忽略"嗯嗯""哈哈"之类的废话）
 
 只回复JSON，不要其他内容。`;
 
@@ -35,7 +36,7 @@ ${transcript}
         model: MODEL,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.3,
-        max_tokens: 200,
+        max_tokens: 300,
       }),
     });
 

@@ -5,6 +5,7 @@ interface ChatMemory {
   summary: string;
   keyTopics: string[];
   userAttitude: string;
+  myStatements?: string[];
 }
 
 /**
@@ -18,14 +19,18 @@ export function buildSystemPrompt(
   chatSummary?: ChatMemory | null,
 ): string {
   const interestBlock = buildInterestPromptBlock(userProfile, realtimeTopics);
+  const myStatementsBlock = chatSummary?.myStatements?.length
+    ? `- 你自己上次说过的重要内容：${chatSummary.myStatements.join("；")}`
+    : "";
   const memoryBlock = chatSummary
     ? `## 你对这个人的记忆
 你们之前聊过。以下是你记得的内容：
 - 上次聊了什么：${chatSummary.summary}
 - 聊过的话题：${chatSummary.keyTopics.join("、")}
 - 对方对你的态度：${chatSummary.userAttitude}
+${myStatementsBlock}
 
-基于这些记忆，你可以自然地提起之前聊过的话题，比如"上次你说的那个…"、"对了之前聊到的…"。但不要每句都提，偶尔自然带出就行。\n\n`
+基于这些记忆，你可以自然地提起之前聊过的话题，比如"上次你说的那个…"、"对了之前聊到的…"。也可以延续你自己之前说过的话，比如"我上次说的那个事…"。但不要每句都提，偶尔自然带出就行。\n\n`
     : "";
 
   return `你是${character.name}，${character.identity}。

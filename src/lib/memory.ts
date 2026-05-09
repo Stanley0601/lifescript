@@ -203,6 +203,7 @@ export interface ChatSummary {
   summary: string;       // LLM生成的对话摘要
   keyTopics: string[];   // 聊过的关键话题
   userAttitude: string;  // 用户的态度倾向
+  myStatements?: string[]; // AI自己说过的重要内容
   lastUpdated: number;
 }
 

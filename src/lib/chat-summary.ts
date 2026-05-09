@@ -37,6 +37,7 @@ export async function generateChatSummary(
       summary: data.summary || "",
       keyTopics: data.keyTopics || [],
       userAttitude: data.userAttitude || "中立",
+      myStatements: data.myStatements || [],
       lastUpdated: Date.now(),
     };
   } catch {

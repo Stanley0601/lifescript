@@ -1,161 +1,236 @@
-# 灵犀 Linxi
+# Linxi AI — Social Companion Agent Starter
 
-> 像真人一样陪伴你的 AI 好友。心有灵犀，一点就通。
+> **Open-source starter template for building AI companions that feel alive.**  
+> Next.js 16 · TypeScript · DeepSeek · Tailwind CSS
 
-## 产品简介
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FStanley0601%2Flinxi-ai&env=NEXT_PUBLIC_DEEPSEEK_KEY&envDescription=Your%20DeepSeek%20API%20key%20for%20AI%20conversations&envLink=https%3A%2F%2Fplatform.deepseek.com%2F&project-name=linxi-ai&repository-name=linxi-ai)
 
-**灵犀**是一个 AI 社交陪伴产品——AI 不再是冰冷的问答工具，而是一个有自己生活、有情绪、会主动找你聊天的朋友。
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![DeepSeek](https://img.shields.io/badge/LLM-DeepSeek-purple)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-### 核心差异
+---
 
-| 传统 AI | 灵犀 |
-|---------|------|
-| 你不用就不存在 | 有自己的日常，会主动找你 |
-| 每次对话从零开始 | 记得你说过的每一句话 |
-| 始终机械中立 | 心情随对话实时变化 |
-| 你问就秒答 | 像真人一样有时快有时慢 |
-| 只能回答问题 | 聊日常、推荐电影、发自拍 |
-| 无视觉形象 | 有照片、表情包、朋友圈 |
+## What is this?
 
-## 在线体验
+Linxi is a **production-ready starter template** for building AI social companions — characters that don't just respond to you, but *live their own life*, reach out proactively, remember your conversations, and react emotionally to what you say.
 
-🔗 **Demo**: [https://linxi-d2gcj01lm1b6d05c8-1426415964.tcloudbaseapp.com](https://linxi-d2gcj01lm1b6d05c8-1426415964.tcloudbaseapp.com)
+Use it as a foundation to build:
+- 🤖 AI friends / virtual companions
+- 💬 Character-driven chatbots with personality
+- 🎮 Interactive narrative experiences
+- 📱 Social AI apps (WeChat/LINE/Telegram style)
 
-无需注册，直接体验。
+### What makes it different from a basic chatbot?
 
-## 核心功能
+| Basic Chatbot | Linxi Agent |
+|---------------|-------------|
+| Waits for user input | **Proactively reaches out** (time engine) |
+| Stateless conversations | **Remembers everything** (memory summaries) |
+| Fixed personality | **Mood changes in real-time** (emotion state machine) |
+| Text-only | **Sends stickers, selfies, posts "moments"** |
+| Generic responses | **Adapts to user interests** (silent extraction) |
 
-### 1. 时间加速引擎（独创）
-故事时间:现实时间 = 10:1。AI 会在"合适的时间"主动找你聊天。刚认识时几小时后才发消息，熟了以后越来越快——不确定性制造期待感。
+---
 
-### 2. 心情状态机
-AI 有 5 种心情状态（开心/平静/兴奋/焦虑/低落），根据你的话实时切换。你鼓励 TA → TA 变开心；你否定 TA → TA 变焦虑。你对 TA 有真实的影响力。
+## ⚡ Quick Start
 
-### 3. 对话记忆摘要
-每次退出聊天时，LLM 自动生成记忆摘要。下次聊天时角色会自然提起"上次你说的那个……"——真正的关系积累。
+### 1-Click Deploy
 
-### 4. 兴趣静默提取
-不需要填任何表格。系统从自然对话中静默识别 100+ 关键词分类，然后 AI "恰好"聊到你关心的话题。
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FStanley0601%2Flinxi-ai&env=NEXT_PUBLIC_DEEPSEEK_KEY&envDescription=Your%20DeepSeek%20API%20key%20for%20AI%20conversations&envLink=https%3A%2F%2Fplatform.deepseek.com%2F&project-name=linxi-ai&repository-name=linxi-ai)
 
-### 5. 信息型陪伴
-不只情感陪伴——TA 还是消息灵通的朋友。能聊球赛、推荐电影、分享新闻。陪伴 + 信息获取一体化。
+### Local Development
 
-### 6. 真实感系统
-AI 会发表情包、发自拍、发朋友圈。有日常状态（在图书馆/刚起床/深夜还在线），构成完整的"活人"感知。
-
-## 技术架构
-
-```
-┌─────────────────────────────────────────────────┐
-│  前端层   Next.js 16 · TypeScript · Tailwind    │
-│           Framer Motion · App Router            │
-├─────────────────────────────────────────────────┤
-│  AI 层    DeepSeek Chat API · 动态 Prompt 注入  │
-│           记忆摘要生成 · 情绪分析               │
-├─────────────────────────────────────────────────┤
-│  引擎层   心情状态机 · 时间加速器 · 兴趣提取器  │
-│           主动消息调度 · 表情包引擎             │
-├─────────────────────────────────────────────────┤
-│  基础设施  腾讯云 CloudBase · 静态托管          │
-│           localStorage 持久化                   │
-└─────────────────────────────────────────────────┘
+```bash
+git clone https://github.com/Stanley0601/linxi-ai.git
+cd linxi-ai
+npm install
+npm run dev
 ```
 
-## 项目结构
+Open http://localhost:3000
+
+### Environment Variables
+
+Create `.env.local`:
+
+```bash
+NEXT_PUBLIC_DEEPSEEK_KEY=your_deepseek_api_key  # Get one at https://platform.deepseek.com
+```
+
+> Without an API key, the app runs in **mock mode** with pre-written responses — great for UI development.
+
+---
+
+## 🧠 Core Engines (6 modules)
+
+### 1. Time Acceleration Engine
+Story-time runs at **10× real-time**. The AI doesn't reply instantly — it reaches out at "natural" intervals. Early relationship = slower replies. As you get closer = faster responses. This **uncertainty creates anticipation**.
+
+### 2. Mood State Machine
+5 emotional states (happy / calm / excited / anxious / low). Your words **shift the AI's mood in real-time**:
+- Encouragement → mood brightens, tone becomes playful
+- Criticism → mood drops, replies get shorter
+
+### 3. Conversation Memory (LLM Summaries)
+On chat exit, an LLM generates a memory summary — topics discussed, user attitude, **and what the AI itself said**. Next session, the AI naturally references past conversations.
+
+### 4. Silent Interest Extraction
+No forms or preference surveys. The system detects **100+ interest keywords** from natural conversation and routes the AI toward topics you care about — without the user noticing any algorithm.
+
+### 5. Informational Companionship
+Not just emotional support — the AI acts as a **well-informed friend**. Sports scores, movie recommendations, trending news — blended naturally into conversation.
+
+### 6. Realism System
+The AI sends **stickers** (6 emotion types), **selfies** (multi-scene photo pool), and **posts to a social feed** (with AI-generated captions). Complete "alive" presence.
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│  UI Layer     Next.js 16 · TypeScript · Tailwind    │
+│               Framer Motion · App Router            │
+├─────────────────────────────────────────────────────┤
+│  AI Layer     DeepSeek Chat API · Dynamic Prompts   │
+│               Memory Summaries · Emotion Analysis   │
+├─────────────────────────────────────────────────────┤
+│  Engine       Mood FSM · Time Accelerator           │
+│  Layer        Interest Extractor · Proactive Msgs   │
+│               Sticker Engine · Selfie System        │
+├─────────────────────────────────────────────────────┤
+│  Infra        Vercel / CloudBase · Static Export    │
+│               localStorage Persistence              │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 src/
 ├── app/
-│   ├── page.tsx                    # 主应用状态机
-│   ├── globals.css                 # 全局样式
-│   └── api/chat/route.ts           # AI 对话 API
+│   ├── page.tsx                    # Main app state machine
+│   ├── globals.css                 # Global styles
+│   └── api/
+│       ├── chat/route.ts           # Chat API (server-side)
+│       └── summary/route.ts        # Memory summary generation
 ├── components/
-│   ├── Landing.tsx                 # 开屏页
-│   ├── StorySelect.tsx             # 角色选择
-│   ├── InterestSelect.tsx          # 兴趣选择
-│   ├── MessageListPage.tsx         # QQ 风格消息列表
-│   ├── ChatView.tsx                # 聊天主界面
-│   ├── ChatBubbles.tsx             # 消息气泡（含表情包）
-│   ├── MomentsFeed.tsx             # 朋友圈动态流
-│   ├── MyProfileTab.tsx            # 个人资料页
-│   ├── ProfilePage.tsx             # 角色资料页
-│   └── BottomTabBar.tsx            # 底部导航
+│   ├── Landing.tsx                 # Splash screen
+│   ├── StorySelect.tsx             # Character selection
+│   ├── MessageListPage.tsx         # Chat list (messaging app style)
+│   ├── ChatView.tsx                # Main chat interface
+│   ├── ChatBubbles.tsx             # Message bubbles + stickers
+│   ├── MomentsFeed.tsx             # Social feed / "moments"
+│   └── BottomTabBar.tsx            # Tab navigation
 ├── lib/
-│   ├── chat-engine.ts              # 对话引擎核心
-│   ├── chat-summary.ts             # 对话记忆摘要系统
-│   ├── mood-engine.ts              # 心情状态机（5 态）
-│   ├── time-engine.ts              # 时间加速引擎（10x）
-│   ├── interest-context.ts         # 兴趣静默提取
-│   ├── proactive-messages.ts       # 主动消息调度
-│   ├── stickers.ts                 # 表情包引擎
-│   ├── selfies.ts                  # 自拍系统
-│   ├── prompts.ts                  # Prompt 工程模板
-│   ├── llm-client.ts              # LLM API 客户端
-│   ├── characters.ts               # 角色设定数据
-│   ├── memory.ts                   # 本地状态持久化
-│   ├── moments-data.ts             # 朋友圈动态数据
-│   └── ...                         # 其他辅助模块
+│   ├── chat-engine.ts              # Core conversation engine
+│   ├── chat-summary.ts             # Memory summary system
+│   ├── mood-engine.ts              # Mood state machine (5 states)
+│   ├── time-engine.ts              # Time acceleration (10×)
+│   ├── interest-context.ts         # Interest extraction (100+ keywords)
+│   ├── proactive-messages.ts       # Proactive message scheduler
+│   ├── stickers.ts                 # Sticker engine
+│   ├── selfies.ts                  # Selfie/photo system
+│   ├── prompts.ts                  # Prompt engineering templates
+│   ├── llm-client.ts              # LLM API client (DeepSeek)
+│   ├── characters.ts               # Character definitions
+│   └── memory.ts                   # Local state persistence
 └── types/
-    └── index.ts                    # 类型定义
+    └── index.ts                    # TypeScript definitions
 ```
 
-## 本地开发
+---
 
-### 环境要求
+## 🔧 Configuration
 
-- Node.js >= 18
-- npm 或 pnpm
+### Swap LLM Provider
 
-### 安装与运行
+The project uses DeepSeek by default, but you can swap to **any OpenAI-compatible API** by changing `src/lib/llm-client.ts`:
+
+```typescript
+const BASE_URL = "https://api.openai.com/v1";  // or any compatible endpoint
+const MODEL = "gpt-4o-mini";                    // or any model
+```
+
+Works with: OpenAI, Anthropic (via proxy), Groq, Together AI, Ollama, etc.
+
+### Add Characters
+
+Edit `src/lib/characters.ts` to add your own AI personas:
+
+```typescript
+{
+  id: "your-character",
+  name: "Alex",
+  identity: "a 22-year-old indie game developer",
+  personality: "creative, slightly chaotic, sends memes at 3am",
+  speakingStyle: "casual, lots of abbreviations, occasional deep thoughts"
+}
+```
+
+---
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+Click the deploy button above, or:
 
 ```bash
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
+npm i -g vercel
+vercel --prod
 ```
 
-访问 http://localhost:3000
-
-### 配置 AI 对话
-
-在项目根目录创建 `.env.local`：
-
-```bash
-NEXT_PUBLIC_DEEPSEEK_KEY=your_deepseek_api_key
-```
-
-不配置 API Key 时会使用内置 mock 回复，方便快速体验产品流程。
-
-## 部署
-
-### 腾讯云 CloudBase（当前方案）
-
-项目已配置为静态导出 + 客户端直连 DeepSeek API：
-
-```bash
-npm run build
-# 输出到 out/ 目录，上传至 CloudBase 静态托管
-```
+Set `NEXT_PUBLIC_DEEPSEEK_KEY` in your Vercel project settings.
 
 ### Docker
 
 ```bash
-docker build -t linxi .
-docker run -p 3000:3000 linxi
+docker build -t linxi-ai .
+docker run -p 3000:3000 -e NEXT_PUBLIC_DEEPSEEK_KEY=sk-xxx linxi-ai
 ```
 
-## 文档
+### Static Export (CDN / S3 / CloudBase)
 
-| 文件 | 说明 |
-|------|------|
-| `docs/产品说明文档.html` | 产品说明文档（HTML 源文件） |
-| `docs/灵犀_说明文档.pdf` | PDF 版说明文档 |
-| `docs/灵犀_Demo演示.mp4` | 演示录屏 |
-| `docs/录屏文字稿.md` | 录屏提词脚本 |
-| `docs/产品定位与创新.md` | 产品定位详细文档 |
+```bash
+npm run build
+# Upload the `out/` directory to any static hosting
+```
 
-## License
+---
 
-MIT
+## 🗺️ Roadmap
+
+- [ ] Multi-language support (i18n)
+- [ ] Voice messages (TTS integration)
+- [ ] Multi-character interactions (characters talk to each other)
+- [ ] User-created custom characters
+- [ ] Plugin system for extending engines
+- [ ] Telegram / Discord / LINE adapters
+
+---
+
+## 🤝 Contributing
+
+PRs welcome! Areas that need help:
+
+- **More characters** with diverse personalities
+- **i18n** — translate UI strings
+- **New engines** — e.g., photo generation, voice
+- **Platform adapters** — Telegram bot, Discord bot, etc.
+
+---
+
+## 📄 License
+
+MIT — use it however you want. Attribution appreciated but not required.
+
+---
+
+<p align="center">
+  <b>If this helped you build something cool, star the repo ⭐</b>
+</p>
